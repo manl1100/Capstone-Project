@@ -50,7 +50,9 @@ public class Event {
         this.artists = artists;
     }
 
-
+    public String getHeadLinerName() {
+        return artists.get(0).artistName;
+    }
 
     public static class Builder {
 

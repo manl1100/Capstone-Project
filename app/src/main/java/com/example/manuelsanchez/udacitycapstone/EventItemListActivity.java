@@ -121,26 +121,26 @@ public class EventItemListActivity extends AppCompatActivity {
             holder.mIdView.setText(mValues.get(position).getArtists().get(0).artistName);
             holder.mContentView.setText(mValues.get(position).getVenueName());
 
-//            holder.mView.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    if (mTwoPane) {
-//                        Bundle arguments = new Bundle();
-//                        arguments.putString(EventItemDetailFragment.ARG_ITEM_ID, holder.mItem.id);
-//                        EventItemDetailFragment fragment = new EventItemDetailFragment();
-//                        fragment.setArguments(arguments);
-//                        getSupportFragmentManager().beginTransaction()
-//                                .replace(R.id.eventitem_detail_container, fragment)
-//                                .commit();
-//                    } else {
-//                        Context context = v.getContext();
-//                        Intent intent = new Intent(context, EventItemDetailActivity.class);
-//                        intent.putExtra(EventItemDetailFragment.ARG_ITEM_ID, holder.mItem.id);
-//
-//                        context.startActivity(intent);
-//                    }
-//                }
-//            });
+            holder.mView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mTwoPane) {
+                        Bundle arguments = new Bundle();
+                        arguments.putString(EventItemDetailFragment.ARG_ITEM_ID, holder.mItem.getHeadLinerName());
+                        EventItemDetailFragment fragment = new EventItemDetailFragment();
+                        fragment.setArguments(arguments);
+                        getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.eventitem_detail_container, fragment)
+                                .commit();
+                    } else {
+                        Context context = v.getContext();
+                        Intent intent = new Intent(context, EventItemDetailActivity.class);
+                        intent.putExtra(EventItemDetailFragment.ARG_ITEM_ID, holder.mItem.getHeadLinerName());
+
+                        context.startActivity(intent);
+                    }
+                }
+            });
         }
 
         public void setData(List<Event> events) {
