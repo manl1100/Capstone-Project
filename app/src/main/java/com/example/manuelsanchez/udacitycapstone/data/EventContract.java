@@ -4,9 +4,7 @@ import android.content.ContentResolver;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
-/**
- * Created by manuelsanchez on 4/10/16
- */
+
 public class EventContract {
 
     public static final String CONTENT_AUTHORITY = "com.example.android.udacitycapstone.app";
