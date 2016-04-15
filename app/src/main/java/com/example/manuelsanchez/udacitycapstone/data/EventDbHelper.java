@@ -13,8 +13,9 @@ public class EventDbHelper extends SQLiteOpenHelper {
 
     static final String DATABASE_NAME = "event.db";
 
-    public EventDbHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
-        super(context, DATABASE_NAME, factory, DATABASE_VERSION);
+    public EventDbHelper(Context context) {
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+
     }
 
     @Override
