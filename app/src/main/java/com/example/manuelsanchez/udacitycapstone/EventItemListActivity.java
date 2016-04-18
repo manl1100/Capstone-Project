@@ -11,6 +11,9 @@ import android.support.v7.widget.Toolbar;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -18,6 +21,7 @@ import android.widget.TextView;
 
 import com.example.manuelsanchez.udacitycapstone.dummy.DummyContent;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,6 +34,8 @@ import java.util.List;
  */
 public class EventItemListActivity extends AppCompatActivity {
 
+
+    SimpleItemRecyclerViewAdapter simpleItemRecyclerViewAdapter;
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
      * device.
@@ -68,16 +74,38 @@ public class EventItemListActivity extends AppCompatActivity {
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(DummyContent.ITEMS));
+        simpleItemRecyclerViewAdapter = new SimpleItemRecyclerViewAdapter();
+        recyclerView.setAdapter(simpleItemRecyclerViewAdapter);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_refresh) {
+            new EventAsyncTask(this, simpleItemRecyclerViewAdapter).execute("75209");
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
-        private final List<DummyContent.DummyItem> mValues;
+        private List<Event> mValues;
 
-        public SimpleItemRecyclerViewAdapter(List<DummyContent.DummyItem> items) {
+        public SimpleItemRecyclerViewAdapter(List<Event> items) {
             mValues = items;
+        }
+
+        public SimpleItemRecyclerViewAdapter() {
+            mValues = new ArrayList<>();
         }
 
         @Override
@@ -90,15 +118,15 @@ public class EventItemListActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
             holder.mItem = mValues.get(position);
-            holder.mIdView.setText(mValues.get(position).id);
-            holder.mContentView.setText(mValues.get(position).content);
+            holder.mIdView.setText(mValues.get(position).getArtists().get(0).artistName);
+            holder.mContentView.setText(mValues.get(position).getVenueName());
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (mTwoPane) {
                         Bundle arguments = new Bundle();
-                        arguments.putString(EventItemDetailFragment.ARG_ITEM_ID, holder.mItem.id);
+                        arguments.putParcelable(EventItemDetailFragment.ARG_ITEM_ID, holder.mItem);
                         EventItemDetailFragment fragment = new EventItemDetailFragment();
                         fragment.setArguments(arguments);
                         getSupportFragmentManager().beginTransaction()
@@ -107,12 +135,17 @@ public class EventItemListActivity extends AppCompatActivity {
                     } else {
                         Context context = v.getContext();
                         Intent intent = new Intent(context, EventItemDetailActivity.class);
-                        intent.putExtra(EventItemDetailFragment.ARG_ITEM_ID, holder.mItem.id);
+                        intent.putExtra(EventItemDetailFragment.ARG_ITEM_ID, holder.mItem);
 
                         context.startActivity(intent);
                     }
                 }
             });
+        }
+
+        public void setData(List<Event> events) {
+            this.mValues = events;
+            this.notifyDataSetChanged();
         }
 
         @Override
@@ -124,7 +157,7 @@ public class EventItemListActivity extends AppCompatActivity {
             public final View mView;
             public final TextView mIdView;
             public final TextView mContentView;
-            public DummyContent.DummyItem mItem;
+            public Event mItem;
 
             public ViewHolder(View view) {
                 super(view);
