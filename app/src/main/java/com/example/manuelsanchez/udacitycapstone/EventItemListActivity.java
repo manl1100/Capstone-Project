@@ -126,7 +126,7 @@ public class EventItemListActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     if (mTwoPane) {
                         Bundle arguments = new Bundle();
-                        arguments.putString(EventItemDetailFragment.ARG_ITEM_ID, holder.mItem.getHeadLinerName());
+                        arguments.putParcelable(EventItemDetailFragment.ARG_ITEM_ID, holder.mItem);
                         EventItemDetailFragment fragment = new EventItemDetailFragment();
                         fragment.setArguments(arguments);
                         getSupportFragmentManager().beginTransaction()
@@ -135,7 +135,7 @@ public class EventItemListActivity extends AppCompatActivity {
                     } else {
                         Context context = v.getContext();
                         Intent intent = new Intent(context, EventItemDetailActivity.class);
-                        intent.putExtra(EventItemDetailFragment.ARG_ITEM_ID, holder.mItem.getHeadLinerName());
+                        intent.putExtra(EventItemDetailFragment.ARG_ITEM_ID, holder.mItem);
 
                         context.startActivity(intent);
                     }

@@ -3,6 +3,7 @@ package com.example.manuelsanchez.udacitycapstone;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Event implements Parcelable {
@@ -22,6 +23,8 @@ public class Event implements Parcelable {
         venueName = in.readString();
         latitude = in.readDouble();
         longitute = in.readDouble();
+        artists = new ArrayList<>();
+        in.readTypedList(artists, Artist.CREATOR);
     }
 
     public static final Creator<Event> CREATOR = new Creator<Event>() {
@@ -91,6 +94,7 @@ public class Event implements Parcelable {
         dest.writeString(venueName);
         dest.writeDouble(latitude);
         dest.writeDouble(longitute);
+        dest.writeTypedList(artists);
     }
 
     public static class Builder {
