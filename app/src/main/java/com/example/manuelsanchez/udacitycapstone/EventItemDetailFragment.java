@@ -42,7 +42,8 @@ public class EventItemDetailFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.eventitem_detail, container, false);
 
         if (mEvent != null) {
-            ((TextView) rootView.findViewById(R.id.eventitem_detail)).setText(mEvent.getVenueName());
+            ((TextView) rootView.findViewById(R.id.eventitem_detail_venue)).setText(mEvent.getVenueName());
+            ((TextView) rootView.findViewById(R.id.eventitem_detail_date)).setText(mEvent.getEventDate());
         }
 
         return rootView;
