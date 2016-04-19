@@ -55,8 +55,16 @@ public class EventItemListActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                if (mTwoPane) {
+                    ArtistSearchActivityFragment fragment = new ArtistSearchActivityFragment();
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.eventitem_detail_container, fragment)
+                            .commit();
+                } else {
+                    Context context = view.getContext();
+                    Intent intent = new Intent(context, ArtistSearchActivity.class);
+                    context.startActivity(intent);
+                }
             }
         });
 

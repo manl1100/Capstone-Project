@@ -3,5 +3,7 @@
     <string name="title_eventitem_detail">EventItem Detail</string>
 
     <string name="action_refresh">Refresh</string>
+    <string name="title_activity_artist_search">ArtistSearchActivity</string>
+    <string name="action_settings">Settings</string>
 
 </resources>

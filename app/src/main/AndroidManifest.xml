@@ -30,12 +30,23 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.manuelsanchez.udacitycapstone.EventItemListActivity" />
         </activity>
+
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value=""/>
+            android:value="" />
+
+        <activity
+            android:name=".ArtistSearchActivity"
+            android:label="@string/title_activity_artist_search"
+            android:parentActivityName=".EventItemListActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.manuelsanchez.udacitycapstone.EventItemListActivity" />
+        </activity>
     </application>
 
 </manifest>
