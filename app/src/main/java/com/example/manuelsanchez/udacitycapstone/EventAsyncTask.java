@@ -44,7 +44,7 @@ public class EventAsyncTask extends AsyncTask<String, Void, List<Event>> {
         try {
             String urlBase = "http://api.eventful.com/json/events/search?";
             String apiKeyParam = "app_key";
-            String apiKey = "";
+            String apiKey = mContext.getString(R.string.eventful_api_key);
             String categoryParam = "category";
             String categoryParamValue = "music";
             String locationParam = "location";

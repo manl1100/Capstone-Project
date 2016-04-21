@@ -87,10 +87,6 @@ public class EventItemListActivity extends AppCompatActivity {
 
         private List<Event> mValues;
 
-        public SimpleItemRecyclerViewAdapter(List<Event> items) {
-            mValues = items;
-        }
-
         public SimpleItemRecyclerViewAdapter() {
             mValues = new ArrayList<>();
         }
@@ -132,7 +128,7 @@ public class EventItemListActivity extends AppCompatActivity {
 
         public void setData(List<Event> events) {
             this.mValues = events;
-            this.notifyDataSetChanged();
+//            this.notifyDataSetChanged();
         }
 
         @Override
