@@ -57,7 +57,7 @@ public class EventItemDetailActivity extends AppCompatActivity {
                     getIntent().getParcelableExtra(EventItemDetailFragment.ARG_ITEM_ID));
             EventItemDetailFragment fragment = new EventItemDetailFragment();
             fragment.setArguments(arguments);
-            getSupportFragmentManager().beginTransaction()
+            getFragmentManager().beginTransaction()
                     .add(R.id.eventitem_detail_container, fragment)
                     .commit();
         }

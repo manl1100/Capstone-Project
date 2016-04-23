@@ -128,6 +128,11 @@ public class EventAsyncTask extends AsyncTask<String, Void, List<Event>> {
         final String JSON_OBJECT_ARTIST = "performers";
         final String JSON_ARTIST = "performer";
         final String JSON_STRING_ARTIST = "name";
+        final String JSON_STRING_REGION_ABBR = "region_abbr";
+        final String JSON_STRING_POSTAL_CODE = "postal_code";
+        final String JSON_STRING_VENUE_ADDRESS = "venue_address";
+        final String JSON_STRING_VENUE_CITY = "city_name";
+
 
         try {
             JSONObject responseObject = new JSONObject(response);
@@ -160,6 +165,11 @@ public class EventAsyncTask extends AsyncTask<String, Void, List<Event>> {
                         .latitude(eventItem.getDouble(JSON_DOUBLE_LATITUDE))
                         .longitude(eventItem.getDouble(JSON_DOUBLE_LONGITUDE))
                         .eventDate(eventItem.getString(JSON_STRING_DATE))
+                        .postalCode(eventItem.getString(JSON_STRING_POSTAL_CODE))
+                        .address(eventItem.getString(JSON_STRING_VENUE_ADDRESS))
+                        .region(eventItem.getString(JSON_STRING_REGION_ABBR))
+                        .city(eventItem.getString(JSON_STRING_VENUE_CITY))
+                        .country(eventItem.getString(JSON_STRING_VENUE_CITY))
                         .artists(artistList)
                         .build();
                 output.add(event);

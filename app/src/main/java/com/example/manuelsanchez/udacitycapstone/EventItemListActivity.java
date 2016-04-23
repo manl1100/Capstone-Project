@@ -112,7 +112,7 @@ public class EventItemListActivity extends AppCompatActivity {
                         arguments.putParcelable(EventItemDetailFragment.ARG_ITEM_ID, holder.mItem);
                         EventItemDetailFragment fragment = new EventItemDetailFragment();
                         fragment.setArguments(arguments);
-                        getSupportFragmentManager().beginTransaction()
+                        getFragmentManager().beginTransaction()
                                 .replace(R.id.eventitem_detail_container, fragment)
                                 .commit();
                     } else {
@@ -128,7 +128,6 @@ public class EventItemListActivity extends AppCompatActivity {
 
         public void setData(List<Event> events) {
             this.mValues = events;
-//            this.notifyDataSetChanged();
         }
 
         @Override

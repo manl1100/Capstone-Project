@@ -10,6 +10,11 @@ public class Event implements Parcelable {
 
     private String eventDate;
     private String venueName;
+    private String country;
+    private String regionAbbr;
+    private String venueCity;
+    private String venueAddress;
+    private String postalCode;
     private double latitude;
     private double longitute;
     private List<Artist> artists;
@@ -21,10 +26,14 @@ public class Event implements Parcelable {
     protected Event(Parcel in) {
         eventDate = in.readString();
         venueName = in.readString();
+        country = in.readString();
+        regionAbbr = in.readString();
+        venueCity = in.readString();
+        venueAddress = in.readString();
+        postalCode = in.readString();
         latitude = in.readDouble();
         longitute = in.readDouble();
-        artists = new ArrayList<>();
-        in.readTypedList(artists, Artist.CREATOR);
+        artists = in.createTypedArrayList(Artist.CREATOR);
     }
 
     public static final Creator<Event> CREATOR = new Creator<Event>() {
@@ -79,6 +88,46 @@ public class Event implements Parcelable {
         this.artists = artists;
     }
 
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getRegionAbbr() {
+        return regionAbbr;
+    }
+
+    public void setRegionAbbr(String regionAbbr) {
+        this.regionAbbr = regionAbbr;
+    }
+
+    public String getVenueAddress() {
+        return venueAddress;
+    }
+
+    public void setVenueAddress(String venueAddress) {
+        this.venueAddress = venueAddress;
+    }
+
+    public String getPostalCode() {
+        return postalCode;
+    }
+
+    public void setPostalCode(String postalCode) {
+        this.postalCode = postalCode;
+    }
+
+    public String getVenueCity() {
+        return venueCity;
+    }
+
+    public void setVenueCity(String venueCity) {
+        this.venueCity = venueCity;
+    }
+
     public String getHeadLinerName() {
         return artists.get(0).artistName;
     }
@@ -92,6 +141,11 @@ public class Event implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(eventDate);
         dest.writeString(venueName);
+        dest.writeString(country);
+        dest.writeString(regionAbbr);
+        dest.writeString(venueCity);
+        dest.writeString(venueAddress);
+        dest.writeString(postalCode);
         dest.writeDouble(latitude);
         dest.writeDouble(longitute);
         dest.writeTypedList(artists);
@@ -123,6 +177,31 @@ public class Event implements Parcelable {
 
         public Builder eventDate(String date) {
             event.setEventDate(date);
+            return this;
+        }
+
+        public Builder region(String region) {
+            event.setRegionAbbr(region);
+            return this;
+        }
+
+        public Builder address(String address) {
+            event.setVenueAddress(address);
+            return this;
+        }
+
+        public Builder postalCode(String postalCode) {
+            event.setPostalCode(postalCode);
+            return this;
+        }
+
+        public Builder city(String city) {
+            event.setVenueCity(city);
+            return this;
+        }
+
+        public Builder country(String country) {
+            event.setCountry(country);
             return this;
         }
 
