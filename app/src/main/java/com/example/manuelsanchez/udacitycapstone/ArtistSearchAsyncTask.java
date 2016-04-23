@@ -18,9 +18,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by manuelsanchez on 4/19/16
- */
+
+
 public class ArtistSearchAsyncTask extends AsyncTask<String, Void, List<Artist>> {
 
     private final String LOG_TAG = ArtistSearchAsyncTask.class.getSimpleName();
