@@ -13,6 +13,7 @@ public class DateUtil {
 
     private static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
     private static String[] months = new DateFormatSymbols().getMonths();
+    private static String[] weekdays = new DateFormatSymbols().getWeekdays();
 
     public static String getFormattedDateString(String longDate) {
         try {
@@ -45,4 +46,21 @@ public class DateUtil {
         }
         return "";
     }
+
+    public static String getFormattedDayString(String longDate) {
+        try {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATE_FORMAT);
+            Date date = simpleDateFormat.parse(longDate);
+            Calendar calendar = new GregorianCalendar();
+            calendar.setTime(date);
+
+            int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+            return weekdays[dayOfWeek];
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+
 }

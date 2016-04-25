@@ -52,8 +52,8 @@ public class EventItemDetailFragment extends Fragment implements OnMapReadyCallb
         if (mEvent != null) {
             ((TextView) rootView.findViewById(R.id.eventitem_detail_venue)).setText(mEvent.getVenueName());
 
+            ((TextView) rootView.findViewById(R.id.eventitem_detail_day)).setText(DateUtil.getFormattedDayString(mEvent.getEventDate()));
             ((TextView) rootView.findViewById(R.id.eventitem_detail_date)).setText(DateUtil.getFormattedDateString(mEvent.getEventDate()));
-            ((TextView) rootView.findViewById(R.id.eventitem_detail_time)).setText(DateUtil.getFormattedTimeString(mEvent.getEventDate()));
 
             ((TextView) rootView.findViewById(R.id.venue_address)).setText(mEvent.getVenueAddress());
 
