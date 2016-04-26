@@ -47,6 +47,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.manuelsanchez.udacitycapstone.EventItemListActivity" />
         </activity>
+        <activity
+            android:name=".ArtistDetailActivity"
+            android:label="@string/title_eventitem_detail"
+            android:parentActivityName=".ArtistSearchActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.manuelsanchez.udacitycapstone.ArtistSearchActivity" />
+        </activity>
     </application>
 
 </manifest>
