@@ -5,6 +5,7 @@ import android.os.Parcelable;
 
 public class Artist implements Parcelable {
 
+    String eventfulArtistId;
     String artistName;
     int eventCount;
     String imageUrl;
@@ -18,7 +19,10 @@ public class Artist implements Parcelable {
     }
 
     protected Artist(Parcel in) {
+        eventfulArtistId = in.readString();
         artistName = in.readString();
+        eventCount = in.readInt();
+        imageUrl = in.readString();
     }
 
     public String getArtistName() {
@@ -45,6 +49,14 @@ public class Artist implements Parcelable {
         this.imageUrl = imageUrl;
     }
 
+    public String getEventfulArtistId() {
+        return eventfulArtistId;
+    }
+
+    public void setEventfulArtistId(String eventfulArtistId) {
+        this.eventfulArtistId = eventfulArtistId;
+    }
+
     public static final Creator<Artist> CREATOR = new Creator<Artist>() {
         @Override
         public Artist createFromParcel(Parcel in) {
@@ -64,7 +76,10 @@ public class Artist implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(eventfulArtistId);
         dest.writeString(artistName);
+        dest.writeInt(eventCount);
+        dest.writeString(imageUrl);
     }
 
     public static class Builder {
@@ -82,6 +97,11 @@ public class Artist implements Parcelable {
 
         public Builder withUrl(String url) {
             artist.setImageUrl(url);
+            return this;
+        }
+
+        public Builder withEventfulId(String id) {
+            artist.setEventfulArtistId(id);
             return this;
         }
 
