@@ -18,6 +18,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.manuelsanchez.udacitycapstone.EventfulJsonConstants.*;
 
 
 public class ArtistSearchAsyncTask extends AsyncTask<String, Void, List<Artist>> {
@@ -100,53 +101,16 @@ public class ArtistSearchAsyncTask extends AsyncTask<String, Void, List<Artist>>
     private List<Artist> parseArtistSearchString(String response) {
         List<Artist> output = new ArrayList<>();
 
-        final String JSON_OBJECT_PERFORMERS = "performers";
-        final String JSON_PERFORMER = "performer";
-        final String JSON_STRING_NAME = "name";
-        final String JSON_INTEGER_EVENT_COUNT = "event_count";
-        final String JSON_OBJECT_IMAGE = "image";
-        final String JSON_OBJECT_MEDIUM_IMAGE = "medium";
-        final String JSON_STRING_IMAGE_URL = "url";
-
         try {
             JSONObject responseObject = new JSONObject(response);
             JSONObject eventObject = responseObject.getJSONObject(JSON_OBJECT_PERFORMERS);
-
             if (eventObject.get(JSON_PERFORMER) instanceof JSONArray) {
-
                 JSONArray eventArray = eventObject.getJSONArray(JSON_PERFORMER);
-
                 for (int i = 0; i < eventArray.length(); i++) {
-                    JSONObject eventItem = eventArray.getJSONObject(i);
-
-                    String name = eventItem.getString(JSON_STRING_NAME);
-                    Integer eventCount = eventItem.getInt(JSON_INTEGER_EVENT_COUNT);
-                    JSONObject image = eventItem.getJSONObject(JSON_OBJECT_IMAGE);
-                    JSONObject medium = image.getJSONObject(JSON_OBJECT_MEDIUM_IMAGE);
-                    String url = medium.getString(JSON_STRING_IMAGE_URL);
-
-                    Artist artist = new Artist.Builder()
-                            .withArtistName(name)
-                            .withEventCount(eventCount)
-                            .withUrl(url)
-                            .build();
-                    output.add(artist);
-
+                    output.add(createArtist(eventArray.getJSONObject(i)));
                 }
             } else {
-                JSONObject performer = eventObject.getJSONObject(JSON_PERFORMER);
-                String name = performer.getString(JSON_STRING_NAME);
-                Integer eventCount = performer.getInt(JSON_INTEGER_EVENT_COUNT);
-                JSONObject image = performer.getJSONObject(JSON_OBJECT_IMAGE);
-                JSONObject medium = image.getJSONObject(JSON_OBJECT_MEDIUM_IMAGE);
-                String url = medium.getString(JSON_STRING_IMAGE_URL);
-
-                Artist artist = new Artist.Builder()
-                        .withArtistName(name)
-                        .withEventCount(eventCount)
-                        .withUrl(url)
-                        .build();
-                output.add(artist);
+                output.add(createArtist(eventObject));
             }
 
         } catch (JSONException e) {
@@ -154,6 +118,23 @@ public class ArtistSearchAsyncTask extends AsyncTask<String, Void, List<Artist>>
         }
 
         return output;
+    }
+
+    private Artist createArtist(JSONObject jsonObject) throws JSONException {
+        JSONObject performer = jsonObject.getJSONObject(JSON_PERFORMER);
+        String name = performer.getString(JSON_STRING_NAME);
+        String id = performer.getString(JSON_STRING_PERFORMER_ID);
+        Integer eventCount = performer.getInt(JSON_INTEGER_EVENT_COUNT);
+        JSONObject image = performer.getJSONObject(JSON_OBJECT_IMAGE);
+        JSONObject medium = image.getJSONObject(JSON_OBJECT_MEDIUM_IMAGE);
+        String url = medium.getString(JSON_STRING_IMAGE_URL);
+
+        return new Artist.Builder()
+                .withArtistName(name)
+                .withEventCount(eventCount)
+                .withUrl(url)
+                .withEventfulId(id)
+                .build();
     }
 
     @Override

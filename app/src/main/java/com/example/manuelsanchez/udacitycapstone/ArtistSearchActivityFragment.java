@@ -82,6 +82,13 @@ public class ArtistSearchActivityFragment extends Fragment {
                     .centerCrop()
                     .into(holder.mImageView);
             holder.mTextView.setText(artistSearchResults.get(position).getArtistName());
+
+            holder.mView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
         }
 
         @Override
