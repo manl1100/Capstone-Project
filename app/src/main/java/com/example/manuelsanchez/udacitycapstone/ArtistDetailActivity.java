@@ -25,6 +25,17 @@ public class ArtistDetailActivity extends AppCompatActivity {
             }
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        if (savedInstanceState == null) {
+            Bundle arguments = new Bundle();
+            arguments.putParcelable(ArtistDetailActivityFragment.ARG_ITEM_ID,
+                    getIntent().getParcelableExtra(ArtistDetailActivityFragment.ARG_ITEM_ID));
+            ArtistDetailActivityFragment fragment = new ArtistDetailActivityFragment();
+            fragment.setArguments(arguments);
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.artist_detail_container, fragment)
+                    .commit();
+        }
     }
 
 }

@@ -1,6 +1,7 @@
 package com.example.manuelsanchez.udacitycapstone;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
@@ -74,7 +75,7 @@ public class ArtistSearchActivityFragment extends Fragment {
         }
 
         @Override
-        public void onBindViewHolder(ViewHolder holder, int position) {
+        public void onBindViewHolder(final ViewHolder holder, int position) {
             holder.mArtist = artistSearchResults.get(position);
             Picasso.with(mContext)
                     .load(artistSearchResults.get(position).getImageUrl())
@@ -86,7 +87,10 @@ public class ArtistSearchActivityFragment extends Fragment {
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    Context context = v.getContext();
+                    Intent intent = new Intent(context, ArtistDetailActivity.class);
+                    intent.putExtra(ArtistDetailActivityFragment.ARG_ITEM_ID, holder.mArtist);
+                    context.startActivity(intent);
                 }
             });
         }
