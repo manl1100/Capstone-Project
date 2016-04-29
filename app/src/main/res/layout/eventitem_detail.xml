@@ -16,33 +16,15 @@
         android:textIsSelectable="true"
         tools:context="com.example.manuelsanchez.udacitycapstone.EventItemDetailFragment" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/eventitem_detail_date"
+        style="?android:attr/textAppearanceLarge"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:paddingLeft="16dp"
-        android:paddingTop="5dp"
-        android:paddingBottom="16dp">
+        android:textIsSelectable="true"
+        tools:context="com.example.manuelsanchez.udacitycapstone.EventItemDetailFragment" />
 
-        <TextView
-            android:id="@+id/eventitem_detail_day"
-            style="?android:attr/textAppearanceLarge"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingEnd="3dp"
-            android:paddingRight="3dp"
-            android:textIsSelectable="true"
-            tools:context="com.example.manuelsanchez.udacitycapstone.EventItemDetailFragment" />
-
-        <TextView
-            android:id="@+id/eventitem_detail_date"
-            style="?android:attr/textAppearanceLarge"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textIsSelectable="true"
-            tools:context="com.example.manuelsanchez.udacitycapstone.EventItemDetailFragment" />
-
-    </LinearLayout>
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
