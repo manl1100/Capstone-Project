@@ -7,9 +7,11 @@ import java.util.List;
 
 public class Event implements Parcelable {
 
+    private String eventId;
     private String eventDate;
     private String venueName;
     private String country;
+    private String region;
     private String regionAbbr;
     private String venueCity;
     private String venueAddress;
@@ -23,9 +25,11 @@ public class Event implements Parcelable {
     }
 
     protected Event(Parcel in) {
+        eventId = in.readString();
         eventDate = in.readString();
         venueName = in.readString();
         country = in.readString();
+        region = in.readString();
         regionAbbr = in.readString();
         venueCity = in.readString();
         venueAddress = in.readString();
@@ -127,6 +131,22 @@ public class Event implements Parcelable {
         this.venueCity = venueCity;
     }
 
+    public String getEventId() {
+        return eventId;
+    }
+
+    public void setEventId(String eventId) {
+        this.eventId = eventId;
+    }
+
+    public String getRegion() {
+        return region;
+    }
+
+    public void setRegion(String region) {
+        this.region = region;
+    }
+
     public String getHeadLinerName() {
         return artists.get(0).artistName;
     }
@@ -138,9 +158,11 @@ public class Event implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(eventId);
         dest.writeString(eventDate);
         dest.writeString(venueName);
         dest.writeString(country);
+        dest.writeString(region);
         dest.writeString(regionAbbr);
         dest.writeString(venueCity);
         dest.writeString(venueAddress);
@@ -179,8 +201,13 @@ public class Event implements Parcelable {
             return this;
         }
 
-        public Builder region(String region) {
+        public Builder regionAbbr(String region) {
             event.setRegionAbbr(region);
+            return this;
+        }
+
+        public Builder region(String region) {
+            event.setRegion(region);
             return this;
         }
 
@@ -201,6 +228,11 @@ public class Event implements Parcelable {
 
         public Builder country(String country) {
             event.setCountry(country);
+            return this;
+        }
+
+        public Builder eventId(String eventId) {
+            event.setEventId(eventId);
             return this;
         }
 

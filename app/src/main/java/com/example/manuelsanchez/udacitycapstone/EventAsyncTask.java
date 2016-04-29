@@ -167,7 +167,7 @@ public class EventAsyncTask extends AsyncTask<String, Void, List<Event>> {
                         .eventDate(eventItem.getString(JSON_STRING_DATE))
                         .postalCode(eventItem.getString(JSON_STRING_POSTAL_CODE))
                         .address(eventItem.getString(JSON_STRING_VENUE_ADDRESS))
-                        .region(eventItem.getString(JSON_STRING_REGION_ABBR))
+                        .regionAbbr(eventItem.getString(JSON_STRING_REGION_ABBR))
                         .city(eventItem.getString(JSON_STRING_VENUE_CITY))
                         .country(eventItem.getString(JSON_STRING_VENUE_CITY))
                         .artists(artistList)
