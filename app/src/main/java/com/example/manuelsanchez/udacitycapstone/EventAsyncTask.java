@@ -1,9 +1,12 @@
 package com.example.manuelsanchez.udacitycapstone;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
+
+import com.example.manuelsanchez.udacitycapstone.data.EventContract;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -17,6 +20,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 
 public class EventAsyncTask extends AsyncTask<String, Void, List<Event>> {
@@ -132,6 +136,7 @@ public class EventAsyncTask extends AsyncTask<String, Void, List<Event>> {
         final String JSON_STRING_POSTAL_CODE = "postal_code";
         final String JSON_STRING_VENUE_ADDRESS = "venue_address";
         final String JSON_STRING_VENUE_CITY = "city_name";
+        Vector<ContentValues> cVVector = new Vector<ContentValues>();
 
 
         try {
@@ -173,9 +178,25 @@ public class EventAsyncTask extends AsyncTask<String, Void, List<Event>> {
                         .artists(artistList)
                         .build();
                 output.add(event);
+
+
+                ContentValues contentValues = new ContentValues();
+                contentValues.put(EventContract.EventEntry.COLUMN_VENUE, event.getVenueName());
+                contentValues.put(EventContract.EventEntry.COLUMN_PERFORMER, event.getHeadLinerName());
+                contentValues.put(EventContract.EventEntry.COLUMN_COORD_LATITUDE, event.getLatitude());
+                contentValues.put(EventContract.EventEntry.COLUMN_COORD_LONGITUDE, event.getLongitute());
+                contentValues.put(EventContract.EventEntry.COLUMN_DATE, event.getEventDate());
+
+                cVVector.add(contentValues);
             }
         } catch (JSONException e) {
             e.printStackTrace();
+        }
+
+        if (cVVector.size() > 0) {
+            ContentValues[] contentValues = new ContentValues[cVVector.size()];
+            cVVector.toArray(contentValues);
+//            mContext.getContentResolver().bulkInsert(EventContract.EventEntry.CONTENT_URI, contentValues);
         }
 
         return output;

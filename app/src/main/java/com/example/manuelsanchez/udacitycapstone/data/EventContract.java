@@ -1,6 +1,7 @@
 package com.example.manuelsanchez.udacitycapstone.data;
 
 import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
@@ -24,5 +25,9 @@ public class EventContract {
         public static final String COLUMN_COORD_LATITUDE = "coord_lat";
         public static final String COLUMN_COORD_LONGITUDE = "coord_long";
         public static final String COLUMN_DATE = "event_date";
+
+        public static Uri buildEventUri(long id) {
+            return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
     }
 }
