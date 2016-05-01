@@ -196,7 +196,7 @@ public class EventAsyncTask extends AsyncTask<String, Void, List<Event>> {
         if (cVVector.size() > 0) {
             ContentValues[] contentValues = new ContentValues[cVVector.size()];
             cVVector.toArray(contentValues);
-//            mContext.getContentResolver().bulkInsert(EventContract.EventEntry.CONTENT_URI, contentValues);
+            mContext.getContentResolver().bulkInsert(EventContract.EventEntry.CONTENT_URI, contentValues);
         }
 
         return output;
