@@ -56,6 +56,12 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.manuelsanchez.udacitycapstone.ArtistSearchActivity" />
         </activity>
+
+        <provider
+            android:authorities="com.example.android.udacitycapstone.app"
+            android:name=".data.EventProvider"
+            android:exported="false"
+            android:syncable="true"/>
     </application>
 
 </manifest>
