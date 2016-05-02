@@ -5,10 +5,10 @@ import android.os.Parcelable;
 
 public class Artist implements Parcelable {
 
-    String eventfulArtistId;
-    String artistName;
-    int eventCount;
-    String imageUrl;
+    private String eventfulArtistId;
+    private String artistName;
+    private int eventCount;
+    private String imageUrl;
 
 
     public Artist() {

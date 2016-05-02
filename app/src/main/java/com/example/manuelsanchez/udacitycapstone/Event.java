@@ -148,7 +148,7 @@ public class Event implements Parcelable {
     }
 
     public String getHeadLinerName() {
-        return artists.get(0).artistName;
+        return artists.get(0).getArtistName();
     }
 
     @Override
