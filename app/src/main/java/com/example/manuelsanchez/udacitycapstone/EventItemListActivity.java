@@ -1,14 +1,17 @@
 package com.example.manuelsanchez.udacitycapstone;
 
+import android.app.LoaderManager;
 import android.content.Context;
+import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.Loader;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -16,14 +19,34 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.example.manuelsanchez.udacitycapstone.data.EventContract;
 
 
-public class EventItemListActivity extends AppCompatActivity {
+public class EventItemListActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    SimpleItemRecyclerViewAdapter simpleItemRecyclerViewAdapter;
+    public static final String LOG_TAG = EventItemListActivity.class.getSimpleName();
+
     private boolean mTwoPane;
+    private RecyclerView recyclerView;
+
+    private static final int COL_ID = 0;
+    private static final int COL_PERFORMER = 1;
+    private static final int COL_VENUE = 2;
+    private static final int COL_LAT = 3;
+    private static final int COL_LONG = 4;
+    private static final int COL_DATE = 5;
+
+    private static final String[] EVENT_COLUMNS = {
+            EventContract.EventEntry._ID,
+            EventContract.EventEntry.COLUMN_PERFORMER,
+            EventContract.EventEntry.COLUMN_VENUE,
+            EventContract.EventEntry.COLUMN_COORD_LATITUDE,
+            EventContract.EventEntry.COLUMN_COORD_LONGITUDE,
+            EventContract.EventEntry.COLUMN_DATE,
+
+    };
+
+    private static final int EVENT_LOADER = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,18 +74,13 @@ public class EventItemListActivity extends AppCompatActivity {
             }
         });
 
-        View recyclerView = findViewById(R.id.eventitem_list);
-        assert recyclerView != null;
-        setupRecyclerView((RecyclerView) recyclerView);
+        recyclerView = (RecyclerView) findViewById(R.id.eventitem_list);
 
         if (findViewById(R.id.eventitem_detail_container) != null) {
             mTwoPane = true;
         }
-    }
 
-    private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        simpleItemRecyclerViewAdapter = new SimpleItemRecyclerViewAdapter();
-        recyclerView.setAdapter(simpleItemRecyclerViewAdapter);
+        getLoaderManager().initLoader(EVENT_LOADER, null, this);
     }
 
     @Override
@@ -76,34 +94,62 @@ public class EventItemListActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_refresh) {
-            new EventAsyncTask(this, simpleItemRecyclerViewAdapter).execute("75209");
+            new EventAsyncTask(this).execute("75209");
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    public class SimpleItemRecyclerViewAdapter
-            extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        Uri eventUri = EventContract.EventEntry.buildEventUriWithDateAndLocation("Dallas", System.currentTimeMillis());
+        return new CursorLoader(getApplicationContext(),
+                eventUri,
+                EVENT_COLUMNS,
+                null,
+                null,
+                null);
+    }
 
-        private List<Event> mValues;
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        SimpleItemRecyclerViewAdapter adapter = new SimpleItemRecyclerViewAdapter(data);
+        adapter.setHasStableIds(true);
+        recyclerView.setAdapter(adapter);
+    }
 
-        public SimpleItemRecyclerViewAdapter() {
-            mValues = new ArrayList<>();
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        recyclerView.setAdapter(null);
+    }
+
+
+    public class SimpleItemRecyclerViewAdapter extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
+
+        private Cursor mCursor;
+
+        public SimpleItemRecyclerViewAdapter(Cursor cursor) {
+            mCursor = cursor;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            mCursor.moveToPosition(position);
+            return mCursor.getLong(COL_ID);
         }
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.eventitem_list_content, parent, false);
+            View view = getLayoutInflater().inflate(R.layout.eventitem_list_content, parent, false);
             return new ViewHolder(view);
         }
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
-            holder.mItem = mValues.get(position);
-            holder.mIdView.setText(mValues.get(position).getArtists().get(0).artistName);
-            holder.mContentView.setText(mValues.get(position).getVenueName());
+            mCursor.moveToPosition(position);
 
+            holder.mContentView.setText(mCursor.getString(COL_VENUE));
+            holder.mIdView.setText(mCursor.getString(COL_PERFORMER));
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -119,20 +165,15 @@ public class EventItemListActivity extends AppCompatActivity {
                         Context context = v.getContext();
                         Intent intent = new Intent(context, EventItemDetailActivity.class);
                         intent.putExtra(EventItemDetailFragment.ARG_ITEM_ID, holder.mItem);
-
                         context.startActivity(intent);
                     }
                 }
             });
         }
 
-        public void setData(List<Event> events) {
-            this.mValues = events;
-        }
-
         @Override
         public int getItemCount() {
-            return mValues.size();
+            return mCursor.getCount();
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {
@@ -146,11 +187,6 @@ public class EventItemListActivity extends AppCompatActivity {
                 mView = view;
                 mIdView = (TextView) view.findViewById(R.id.id);
                 mContentView = (TextView) view.findViewById(R.id.content);
-            }
-
-            @Override
-            public String toString() {
-                return super.toString() + " '" + mContentView.getText() + "'";
             }
         }
     }

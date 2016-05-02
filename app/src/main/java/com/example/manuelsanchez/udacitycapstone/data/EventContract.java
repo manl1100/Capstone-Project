@@ -29,5 +29,9 @@ public class EventContract {
         public static Uri buildEventUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
+
+        public static Uri buildEventUriWithDateAndLocation(String location, long startDate) {
+            return CONTENT_URI;
+        }
     }
 }

@@ -23,8 +23,8 @@ public class EventDbHelper extends SQLiteOpenHelper {
         final String SQL_CREATE_EVENT_TABLE =
                 "CREATE TABLE " + EventEntry.TABLE_NAME + " (" +
                         EventEntry._ID + " INTEGER PRIMARY KEY, " +
-                        EventEntry.COLUMN_PERFORMER + " TEXT UNIQUE NOT NULL, " +
-                        EventEntry.COLUMN_VENUE + " TEXT UNIQUE NOT NULL, " +
+                        EventEntry.COLUMN_PERFORMER + " TEXT NOT NULL, " +
+                        EventEntry.COLUMN_VENUE + " TEXT NOT NULL, " +
                         EventEntry.COLUMN_COORD_LATITUDE + " REAL NOT NULL, " +
                         EventEntry.COLUMN_COORD_LONGITUDE + " REAL NOT NULL, " +
                         EventEntry.COLUMN_DATE + " INTEGER NOT NULL " +

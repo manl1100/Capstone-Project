@@ -28,11 +28,9 @@ public class EventAsyncTask extends AsyncTask<String, Void, List<Event>> {
     private final String LOG_TAG = EventAsyncTask.class.getSimpleName();
 
     private Context mContext;
-    private EventItemListActivity.SimpleItemRecyclerViewAdapter mConcertEventAdapter;
 
-    public EventAsyncTask(Context context, EventItemListActivity.SimpleItemRecyclerViewAdapter eventAdapter) {
+    public EventAsyncTask(Context context) {
         this.mContext = context;
-        this.mConcertEventAdapter = eventAdapter;
     }
 
     @Override
@@ -202,9 +200,4 @@ public class EventAsyncTask extends AsyncTask<String, Void, List<Event>> {
         return output;
     }
 
-    @Override
-    protected void onPostExecute(List<Event> events) {
-        mConcertEventAdapter.setData(events);
-        mConcertEventAdapter.notifyDataSetChanged();
-    }
 }

@@ -50,7 +50,13 @@ public class EventProvider extends ContentProvider {
     @Nullable
     @Override
     public String getType(Uri uri) {
-        return null;
+        switch (sUriMatcher.match(uri)) {
+            case EVENT: {
+                return EventContract.EventEntry.CONTENT_TYPE;
+            }
+            default:
+                throw new UnsupportedOperationException("Unknown type: " + uri);
+        }
     }
 
     @Nullable
