@@ -9,10 +9,14 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.Nullable;
 
+import static com.example.manuelsanchez.udacitycapstone.data.EventContract.*;
+
 public class EventProvider extends ContentProvider {
 
     private static final UriMatcher sUriMatcher = buildUriMatcher();
     private static final int EVENT = 100;
+    private static final int PERFORMER = 200;
+    private static final int PERFORMEREVENT = 300;
 
     private EventDbHelper mOpenHelper;
 
@@ -29,7 +33,7 @@ public class EventProvider extends ContentProvider {
         switch (sUriMatcher.match(uri)) {
             case EVENT: {
                 returnCursor = mOpenHelper.getReadableDatabase().query(
-                        EventContract.EventEntry.TABLE_NAME,
+                        EventEntry.TABLE_NAME,
                         projection,
                         selection,
                         selectionArgs,
@@ -52,7 +56,7 @@ public class EventProvider extends ContentProvider {
     public String getType(Uri uri) {
         switch (sUriMatcher.match(uri)) {
             case EVENT: {
-                return EventContract.EventEntry.CONTENT_TYPE;
+                return EventEntry.CONTENT_TYPE;
             }
             default:
                 throw new UnsupportedOperationException("Unknown type: " + uri);
@@ -68,9 +72,9 @@ public class EventProvider extends ContentProvider {
 
         switch (match) {
             case EVENT: {
-                long id = db.insert(EventContract.EventEntry.TABLE_NAME, null, values);
+                long id = db.insert(EventEntry.TABLE_NAME, null, values);
                 if (id > 0) {
-                    returnUri = EventContract.EventEntry.buildEventUri(id);
+                    returnUri = EventEntry.buildEventUri(id);
                 }
                 break;
             }
@@ -94,37 +98,52 @@ public class EventProvider extends ContentProvider {
 
     @Override
     public int bulkInsert(Uri uri, ContentValues[] values) {
-        final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
         final int match = sUriMatcher.match(uri);
 
         switch (match) {
-            case EVENT: {
-                db.beginTransaction();
-                int returnCount = 0;
-                try {
-                    for (ContentValues val : values) {
-                        long id = db.insert(EventContract.EventEntry.TABLE_NAME, null, val);
-                        if (id != -1) {
-                            returnCount++;
-                        }
-                    }
-                    db.setTransactionSuccessful();
-                } finally {
-                    db.endTransaction();
-                }
 
-                return returnCount;
+            case EVENT: {
+                return bulkInsert(values, EventEntry.TABLE_NAME);
             }
+
+            case PERFORMER: {
+                return bulkInsert(values, PerformerEntry.TABLE_NAME);
+            }
+
+            case PERFORMEREVENT: {
+                return bulkInsert(values, PerformerEventMapEntry.TABLE_NAME);
+            }
+
             default:
                 return super.bulkInsert(uri, values);
         }
     }
 
+    private int bulkInsert(ContentValues[] contentValues, String tableName) {
+        SQLiteDatabase database =  mOpenHelper.getWritableDatabase();
+        int count = 0;
+        try {
+            for (ContentValues val : contentValues) {
+                long id = database.insert(tableName, null, val);
+                if (id != -1) {
+                    count++;
+                }
+            }
+            database.setTransactionSuccessful();
+        } finally {
+          database.endTransaction();
+        }
+
+        return count;
+    }
+
     private static UriMatcher buildUriMatcher() {
         final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
-        final String authority = EventContract.CONTENT_AUTHORITY;
+        final String authority = CONTENT_AUTHORITY;
 
-        matcher.addURI(authority, EventContract.PATH_EVENT, EVENT);
+        matcher.addURI(authority, PATH_EVENT, EVENT);
+        matcher.addURI(authority, PATH_PERFORMER, PERFORMER);
+        matcher.addURI(authority, PATH_PERFORMER_EVENT, PERFORMEREVENT);
 
         return matcher;
     }
