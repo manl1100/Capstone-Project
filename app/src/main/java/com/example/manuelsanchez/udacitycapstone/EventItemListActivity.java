@@ -19,7 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.manuelsanchez.udacitycapstone.data.EventContract;
+import static com.example.manuelsanchez.udacitycapstone.data.EventContract.*;
 
 
 public class EventItemListActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
@@ -29,7 +29,7 @@ public class EventItemListActivity extends AppCompatActivity implements LoaderMa
     private boolean mTwoPane;
     private RecyclerView recyclerView;
 
-    private static final int COL_ID = 0;
+    private static final int COL_EVENT_ID = 0;
     private static final int COL_PERFORMER = 1;
     private static final int COL_VENUE = 2;
     private static final int COL_LAT = 3;
@@ -37,12 +37,12 @@ public class EventItemListActivity extends AppCompatActivity implements LoaderMa
     private static final int COL_DATE = 5;
 
     private static final String[] EVENT_COLUMNS = {
-            EventContract.EventEntry._ID,
-            EventContract.EventEntry.COLUMN_PERFORMER,
-            EventContract.EventEntry.COLUMN_VENUE,
-            EventContract.EventEntry.COLUMN_COORD_LATITUDE,
-            EventContract.EventEntry.COLUMN_COORD_LONGITUDE,
-            EventContract.EventEntry.COLUMN_DATE,
+            EventEntry.TABLE_NAME + "." + EventEntry.COLUMN_EVENT_ID,
+            PerformerEntry.COLUMN_PERFORMER_NAME,
+            EventEntry.COLUMN_VENUE,
+            EventEntry.COLUMN_COORD_LATITUDE,
+            EventEntry.COLUMN_COORD_LONGITUDE,
+            EventEntry.COLUMN_DATE,
 
     };
 
@@ -102,7 +102,7 @@ public class EventItemListActivity extends AppCompatActivity implements LoaderMa
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        Uri eventUri = EventContract.EventEntry.buildEventUriWithDateAndLocation("Dallas", System.currentTimeMillis());
+        Uri eventUri = EventEntry.buildEventUriWithDateAndLocation("Dallas", System.currentTimeMillis());
         return new CursorLoader(getApplicationContext(),
                 eventUri,
                 EVENT_COLUMNS,
@@ -135,7 +135,7 @@ public class EventItemListActivity extends AppCompatActivity implements LoaderMa
         @Override
         public long getItemId(int position) {
             mCursor.moveToPosition(position);
-            return mCursor.getLong(COL_ID);
+            return mCursor.getLong(COL_EVENT_ID);
         }
 
         @Override
@@ -150,25 +150,25 @@ public class EventItemListActivity extends AppCompatActivity implements LoaderMa
 
             holder.mContentView.setText(mCursor.getString(COL_VENUE));
             holder.mIdView.setText(mCursor.getString(COL_PERFORMER));
-            holder.mView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mTwoPane) {
-                        Bundle arguments = new Bundle();
-                        arguments.putParcelable(EventItemDetailFragment.ARG_ITEM_ID, holder.mItem);
-                        EventItemDetailFragment fragment = new EventItemDetailFragment();
-                        fragment.setArguments(arguments);
-                        getFragmentManager().beginTransaction()
-                                .replace(R.id.eventitem_detail_container, fragment)
-                                .commit();
-                    } else {
-                        Context context = v.getContext();
-                        Intent intent = new Intent(context, EventItemDetailActivity.class);
-                        intent.putExtra(EventItemDetailFragment.ARG_ITEM_ID, holder.mItem);
-                        context.startActivity(intent);
-                    }
-                }
-            });
+//            holder.mView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    if (mTwoPane) {
+//                        Bundle arguments = new Bundle();
+//                        arguments.putParcelable(EventItemDetailFragment.ARG_ITEM_ID, holder.mItem);
+//                        EventItemDetailFragment fragment = new EventItemDetailFragment();
+//                        fragment.setArguments(arguments);
+//                        getFragmentManager().beginTransaction()
+//                                .replace(R.id.eventitem_detail_container, fragment)
+//                                .commit();
+//                    } else {
+//                        Context context = v.getContext();
+//                        Intent intent = new Intent(context, EventItemDetailActivity.class);
+//                        intent.putExtra(EventItemDetailFragment.ARG_ITEM_ID, holder.mItem);
+//                        context.startActivity(intent);
+//                    }
+//                }
+//            });
         }
 
         @Override
