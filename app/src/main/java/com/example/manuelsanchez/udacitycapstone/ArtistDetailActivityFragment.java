@@ -44,7 +44,7 @@ public class ArtistDetailActivityFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_artist_detail, container, false);
 
         if (mArtist != null) {
-            ((TextView) view.findViewById(R.id.performing_artist)).setText(mArtist.artistName);
+            ((TextView) view.findViewById(R.id.performing_artist)).setText(mArtist.getArtistName());
             RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.tour_dates);
             mTourDateRecyclerViewAdapter = new TourDateRecyclerViewAdapter();
             recyclerView.setAdapter(mTourDateRecyclerViewAdapter);

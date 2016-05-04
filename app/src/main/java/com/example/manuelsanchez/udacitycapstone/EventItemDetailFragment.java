@@ -116,7 +116,7 @@ public class EventItemDetailFragment extends Fragment implements OnMapReadyCallb
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
             holder.mItem = mValues.get(position);
-            holder.mPerformer.setText(mValues.get(position).artistName);
+            holder.mPerformer.setText(mValues.get(position).getArtistName());
         }
 
         @Override
