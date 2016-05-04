@@ -6,6 +6,7 @@ import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.support.annotation.Nullable;
 
@@ -13,12 +14,38 @@ import static com.example.manuelsanchez.udacitycapstone.data.EventContract.*;
 
 public class EventProvider extends ContentProvider {
 
+    private EventDbHelper mOpenHelper;
+
     private static final UriMatcher sUriMatcher = buildUriMatcher();
     private static final int EVENT = 100;
     private static final int PERFORMER = 200;
     private static final int PERFORMEREVENT = 300;
 
-    private EventDbHelper mOpenHelper;
+    private static UriMatcher buildUriMatcher() {
+        final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
+        final String authority = CONTENT_AUTHORITY;
+
+        matcher.addURI(authority, PATH_EVENT, EVENT);
+        matcher.addURI(authority, PATH_PERFORMER, PERFORMER);
+        matcher.addURI(authority, PATH_PERFORMER_EVENT, PERFORMEREVENT);
+
+        return matcher;
+    }
+
+    private static final SQLiteQueryBuilder eventsQueryBuilder = new SQLiteQueryBuilder();
+
+    static {
+        eventsQueryBuilder.setTables(
+                EventEntry.TABLE_NAME +
+                        " INNER JOIN " + PerformerEventMapEntry.TABLE_NAME +
+                        " ON " + EventEntry.TABLE_NAME + "." + EventEntry.COLUMN_EVENT_ID +
+                        " = " + PerformerEventMapEntry.TABLE_NAME + "." + PerformerEventMapEntry.COLUMN_EVENT_ID +
+
+                        " INNER JOIN " + PerformerEntry.TABLE_NAME +
+                        " ON " + PerformerEntry.TABLE_NAME + "." + PerformerEntry.COLUMN_PERFORMER_ID +
+                        " = " + PerformerEventMapEntry.TABLE_NAME + "." + PerformerEventMapEntry.COLUMN_PERFORMER_ID
+        );
+    }
 
     @Override
     public boolean onCreate() {
@@ -30,23 +57,24 @@ public class EventProvider extends ContentProvider {
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         Cursor returnCursor;
+
         switch (sUriMatcher.match(uri)) {
+
             case EVENT: {
-                returnCursor = mOpenHelper.getReadableDatabase().query(
-                        EventEntry.TABLE_NAME,
+                returnCursor = eventsQueryBuilder.query(mOpenHelper.getReadableDatabase(),
                         projection,
-                        selection,
-                        selectionArgs,
                         null,
                         null,
-                        sortOrder
-                );
+                        null,
+                        null,
+                        sortOrder);
                 break;
             }
 
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
+
         returnCursor.setNotificationUri(getContext().getContentResolver(), uri);
         return returnCursor;
     }
@@ -120,7 +148,8 @@ public class EventProvider extends ContentProvider {
     }
 
     private int bulkInsert(ContentValues[] contentValues, String tableName) {
-        SQLiteDatabase database =  mOpenHelper.getWritableDatabase();
+        final SQLiteDatabase database =  mOpenHelper.getWritableDatabase();
+        database.beginTransaction();
         int count = 0;
         try {
             for (ContentValues val : contentValues) {
@@ -135,16 +164,5 @@ public class EventProvider extends ContentProvider {
         }
 
         return count;
-    }
-
-    private static UriMatcher buildUriMatcher() {
-        final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
-        final String authority = CONTENT_AUTHORITY;
-
-        matcher.addURI(authority, PATH_EVENT, EVENT);
-        matcher.addURI(authority, PATH_PERFORMER, PERFORMER);
-        matcher.addURI(authority, PATH_PERFORMER_EVENT, PERFORMEREVENT);
-
-        return matcher;
     }
 }

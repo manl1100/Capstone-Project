@@ -6,7 +6,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.example.manuelsanchez.udacitycapstone.data.EventContract;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -21,6 +20,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
+
+import static com.example.manuelsanchez.udacitycapstone.data.EventContract.*;
 
 
 public class EventAsyncTask extends AsyncTask<String, Void, List<Event>> {
@@ -119,8 +120,8 @@ public class EventAsyncTask extends AsyncTask<String, Void, List<Event>> {
     }
 
     private List<Event> parseConcertString(String response) {
-        List<Event> output = new ArrayList<>();
 
+        // TODO: Move to constants file
         final String JSON_OBJECT_EVENT = "events";
         final String JSON_ARRAY_EVENT = "event";
         final String JSON_STRING_DATE = "start_time";
@@ -134,7 +135,15 @@ public class EventAsyncTask extends AsyncTask<String, Void, List<Event>> {
         final String JSON_STRING_POSTAL_CODE = "postal_code";
         final String JSON_STRING_VENUE_ADDRESS = "venue_address";
         final String JSON_STRING_VENUE_CITY = "city_name";
-        Vector<ContentValues> cVVector = new Vector<ContentValues>();
+        final String JSON_STRING_ID = "id";
+
+
+        List<Event> events = new ArrayList<>();
+        List<Artist> artists = new ArrayList<>();
+
+        Vector<ContentValues> eventsVector = new Vector<>();
+        Vector<ContentValues> performerVector = new Vector<>();
+        Vector<ContentValues> performerEventVector = new Vector<>();
 
 
         try {
@@ -155,15 +164,18 @@ public class EventAsyncTask extends AsyncTask<String, Void, List<Event>> {
                     JSONArray artistArray = artistObject.getJSONArray(JSON_ARTIST);
                     for (int j = 0; j < artistArray.length(); j++) {
                         String artistName = artistArray.getJSONObject(j).getString(JSON_STRING_ARTIST);
-                        artistList.add(new Artist(artistName));
+                        String artistId = artistArray.getJSONObject(j).getString(JSON_STRING_ID);
+                        artistList.add(new Artist(artistName, artistId));
                     }
                 } else {
+                    //TODO: remove artist object
                     String artist = artistObject.getJSONObject(JSON_ARTIST).getString(JSON_STRING_ARTIST);
-                    artistList.add(new Artist(artist));
+                    String artistId = artistObject.getJSONObject(JSON_ARTIST).getString(JSON_STRING_ID);
+                    artistList.add(new Artist(artist, artistId));
                 }
 
-
                 Event event = new Event.Builder()
+                        .eventId(eventItem.getString(JSON_STRING_ID))
                         .venueName(eventItem.getString(JSON_STRING_VENUE_NAME))
                         .latitude(eventItem.getDouble(JSON_DOUBLE_LATITUDE))
                         .longitude(eventItem.getDouble(JSON_DOUBLE_LONGITUDE))
@@ -175,29 +187,46 @@ public class EventAsyncTask extends AsyncTask<String, Void, List<Event>> {
                         .country(eventItem.getString(JSON_STRING_VENUE_CITY))
                         .artists(artistList)
                         .build();
-                output.add(event);
+                events.add(event);
 
+                ContentValues eventValues = new ContentValues();
+                eventValues.put(EventEntry.COLUMN_EVENT_ID, event.getEventId());
+                eventValues.put(EventEntry.COLUMN_VENUE, event.getVenueName());
+                eventValues.put(EventEntry.COLUMN_COORD_LATITUDE, event.getLatitude());
+                eventValues.put(EventEntry.COLUMN_COORD_LONGITUDE, event.getLongitute());
+                eventValues.put(EventEntry.COLUMN_DATE, event.getEventDate());
+                eventsVector.add(eventValues);
 
-                ContentValues contentValues = new ContentValues();
-                contentValues.put(EventContract.EventEntry.COLUMN_VENUE, event.getVenueName());
-                contentValues.put(EventContract.EventEntry.COLUMN_PERFORMER, event.getHeadLinerName());
-                contentValues.put(EventContract.EventEntry.COLUMN_COORD_LATITUDE, event.getLatitude());
-                contentValues.put(EventContract.EventEntry.COLUMN_COORD_LONGITUDE, event.getLongitute());
-                contentValues.put(EventContract.EventEntry.COLUMN_DATE, event.getEventDate());
+                for (Artist artist : artistList) {
+                    ContentValues performerValues = new ContentValues();
+                    performerValues.put(PerformerEntry.COLUMN_PERFORMER_ID, artist.getEventfulArtistId());
+                    performerValues.put(PerformerEntry.COLUMN_PERFORMER_NAME, artist.getArtistName());
+                    performerValues.put(PerformerEntry.COLUMN_IMAGE_URL, artist.getImageUrl());
+                    performerVector.add(performerValues);
 
-                cVVector.add(contentValues);
+                    ContentValues performerEvent = new ContentValues();
+                    performerEvent.put(PerformerEventMapEntry.COLUMN_EVENT_ID, event.getEventId());
+                    performerEvent.put(PerformerEventMapEntry.COLUMN_PERFORMER_ID, artist.getEventfulArtistId());
+                    performerEventVector.add(performerEvent);
+                }
+
             }
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        if (cVVector.size() > 0) {
-            ContentValues[] contentValues = new ContentValues[cVVector.size()];
-            cVVector.toArray(contentValues);
-            mContext.getContentResolver().bulkInsert(EventContract.EventEntry.CONTENT_URI, contentValues);
-        }
+        bulkInsert(eventsVector, EventEntry.CONTENT_URI);
+        bulkInsert(performerVector, PerformerEntry.CONTENT_URI);
+        bulkInsert(performerEventVector, PerformerEventMapEntry.CONTENT_URI);
 
-        return output;
+        return events;
+    }
+
+    private void bulkInsert(Vector<ContentValues> contentValues, Uri contentUri) {
+        ContentValues[] values = new ContentValues[contentValues.size()];
+        contentValues.toArray(values);
+        mContext.getContentResolver().bulkInsert(contentUri, values);
     }
 
 }
