@@ -37,7 +37,7 @@ public class EventDbHelper extends SQLiteOpenHelper {
                         PerformerEntry._ID + " INTEGER PRIMARY KEY, " +
                         PerformerEntry.COLUMN_PERFORMER_ID + " TEXT UNIQUE NOT NULL, " +
                         PerformerEntry.COLUMN_PERFORMER_NAME + " TEXT UNIQUE NOT NULL, " +
-                        PerformerEntry.COLUMN_IMAGE_URL + " TEXT NOT NULL " +
+                        PerformerEntry.COLUMN_IMAGE_URL + " TEXT " +
                         " );";
 
         final String SQL_CREATE_PERFORMER_EVENT_MAP_TABLE =
