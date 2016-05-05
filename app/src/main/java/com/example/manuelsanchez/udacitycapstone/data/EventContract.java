@@ -30,9 +30,23 @@ public class EventContract {
         public static final String COLUMN_COORD_LONGITUDE = "coord_long";
         public static final String COLUMN_DATE = "event_date";
         public static final String COLUMN_EVENT_ID = "event_id";
+        public static final String COLUMN_COUNTRY = "country";
+        public static final String COLUMN_REGION = "region";
+        public static final String COLUMN_REGION_ABBR = "region_abbr";
+        public static final String COLUMN_VENUE_CITY = "venue_city";
+        public static final String COLUMN_VENUE_ADDRESS = "venue_address";
+        public static final String COLUMN_VENUE_POSTAL_CODE = "venue_postal_code";
 
         public static Uri buildEventUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
+
+        public static Uri buildEventUriWithId(String eventId) {
+            return CONTENT_URI.buildUpon().appendQueryParameter(COLUMN_EVENT_ID, eventId).build();
+        }
+
+        public static String getEventIdFromUri(Uri uri) {
+            return uri.getQueryParameter(COLUMN_EVENT_ID);
         }
 
         public static Uri buildEventUriWithDateAndLocation(String location, long startDate) {
