@@ -18,6 +18,7 @@ public class EventProvider extends ContentProvider {
 
     private static final UriMatcher sUriMatcher = buildUriMatcher();
     private static final int EVENT = 100;
+    private static final int EVENT_WITH_ID = 150;
     private static final int PERFORMER = 200;
     private static final int PERFORMEREVENT = 300;
 
@@ -26,7 +27,10 @@ public class EventProvider extends ContentProvider {
         final String authority = CONTENT_AUTHORITY;
 
         matcher.addURI(authority, PATH_EVENT, EVENT);
+        matcher.addURI(authority, PATH_EVENT + "/*", EVENT_WITH_ID);
+
         matcher.addURI(authority, PATH_PERFORMER, PERFORMER);
+
         matcher.addURI(authority, PATH_PERFORMER_EVENT, PERFORMEREVENT);
 
         return matcher;
@@ -47,6 +51,8 @@ public class EventProvider extends ContentProvider {
         );
     }
 
+    private static final String eventById = EventEntry.TABLE_NAME + "." + EventEntry.COLUMN_EVENT_ID + " = ? ";
+
     @Override
     public boolean onCreate() {
         mOpenHelper = new EventDbHelper(getContext());
@@ -65,6 +71,18 @@ public class EventProvider extends ContentProvider {
                         projection,
                         null,
                         null,
+                        null,
+                        null,
+                        sortOrder);
+                break;
+            }
+
+            case EVENT_WITH_ID: {
+                String eventId = EventEntry.getEventIdFromUri(uri);
+                returnCursor = eventsQueryBuilder.query(mOpenHelper.getReadableDatabase(),
+                        projection,
+                        eventById,
+                        new String[] {eventId},
                         null,
                         null,
                         sortOrder);
