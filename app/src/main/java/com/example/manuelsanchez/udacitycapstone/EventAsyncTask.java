@@ -195,6 +195,12 @@ public class EventAsyncTask extends AsyncTask<String, Void, List<Event>> {
                 eventValues.put(EventEntry.COLUMN_COORD_LATITUDE, event.getLatitude());
                 eventValues.put(EventEntry.COLUMN_COORD_LONGITUDE, event.getLongitute());
                 eventValues.put(EventEntry.COLUMN_DATE, event.getEventDate());
+                eventValues.put(EventEntry.COLUMN_COUNTRY, event.getCountry());
+                eventValues.put(EventEntry.COLUMN_REGION, event.getRegion());
+                eventValues.put(EventEntry.COLUMN_REGION_ABBR, event.getRegionAbbr());
+                eventValues.put(EventEntry.COLUMN_VENUE_CITY, event.getVenueCity());
+                eventValues.put(EventEntry.COLUMN_VENUE_ADDRESS, event.getVenueAddress());
+                eventValues.put(EventEntry.COLUMN_VENUE_POSTAL_CODE, event.getPostalCode());
                 eventsVector.add(eventValues);
 
                 for (Artist artist : artistList) {
