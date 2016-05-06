@@ -19,6 +19,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.manuelsanchez.udacitycapstone.data.EventContract;
+
 import static com.example.manuelsanchez.udacitycapstone.data.EventContract.*;
 
 
@@ -29,24 +31,35 @@ public class EventItemListActivity extends AppCompatActivity implements LoaderMa
     private boolean mTwoPane;
     private RecyclerView recyclerView;
 
-    private static final int COL_EVENT_ID = 0;
-    private static final int COL_PERFORMER = 1;
-    private static final int COL_VENUE = 2;
-    private static final int COL_LAT = 3;
-    private static final int COL_LONG = 4;
-    private static final int COL_DATE = 5;
+    public static final int COL_EVENT_ID = 0;
+    public static final int COL_PERFORMER = 1;
+    public static final int COL_VENUE = 2;
+    public static final int COL_LATITUDE = 3;
+    public static final int COL_LONGITUDE = 4;
+    public static final int COL_DATE = 5;
+    public static final int COL_COUNTRY = 6;
+    public static final int COL_REGION = 7;
+    public static final int COL_REGION_ABBR = 8;
+    public static final int COL_VENUE_CITY = 9;
+    public static final int COL_VENUE_ADDRESS = 10;
+    public static final int COL_VENUE_POSTAL_CODE = 11;
 
-    private static final String[] EVENT_COLUMNS = {
+    public static final String[] EVENT_COLUMNS = {
             EventEntry.TABLE_NAME + "." + EventEntry.COLUMN_EVENT_ID,
             PerformerEntry.COLUMN_PERFORMER_NAME,
             EventEntry.COLUMN_VENUE,
             EventEntry.COLUMN_COORD_LATITUDE,
             EventEntry.COLUMN_COORD_LONGITUDE,
             EventEntry.COLUMN_DATE,
-
+            EventEntry.COLUMN_COUNTRY,
+            EventEntry.COLUMN_REGION,
+            EventEntry.COLUMN_REGION_ABBR,
+            EventEntry.COLUMN_VENUE_CITY,
+            EventEntry.COLUMN_VENUE_ADDRESS,
+            EventEntry.COLUMN_VENUE_POSTAL_CODE,
     };
 
-    private static final int EVENT_LOADER = 0;
+    public static final int EVENT_LOADER = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,25 +163,25 @@ public class EventItemListActivity extends AppCompatActivity implements LoaderMa
 
             holder.mContentView.setText(mCursor.getString(COL_VENUE));
             holder.mIdView.setText(mCursor.getString(COL_PERFORMER));
-//            holder.mView.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    if (mTwoPane) {
-//                        Bundle arguments = new Bundle();
-//                        arguments.putParcelable(EventItemDetailFragment.ARG_ITEM_ID, holder.mItem);
-//                        EventItemDetailFragment fragment = new EventItemDetailFragment();
-//                        fragment.setArguments(arguments);
-//                        getFragmentManager().beginTransaction()
-//                                .replace(R.id.eventitem_detail_container, fragment)
-//                                .commit();
-//                    } else {
-//                        Context context = v.getContext();
-//                        Intent intent = new Intent(context, EventItemDetailActivity.class);
-//                        intent.putExtra(EventItemDetailFragment.ARG_ITEM_ID, holder.mItem);
-//                        context.startActivity(intent);
-//                    }
-//                }
-//            });
+            holder.mView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mTwoPane) {
+                        Bundle arguments = new Bundle();
+                        arguments.putParcelable(EventItemDetailFragment.ARG_ITEM_ID, holder.mItem);
+                        EventItemDetailFragment fragment = new EventItemDetailFragment();
+                        fragment.setArguments(arguments);
+                        getFragmentManager().beginTransaction()
+                                .replace(R.id.eventitem_detail_container, fragment)
+                                .commit();
+                    } else {
+                        Context context = v.getContext();
+                        Intent intent = new Intent(context, EventItemDetailActivity.class);
+                        intent.putExtra(EventItemDetailFragment.ARG_ITEM_ID, EventContract.EventEntry.buildEventUriWithId(mCursor.getString(COL_EVENT_ID)));
+                        context.startActivity(intent);
+                    }
+                }
+            });
         }
 
         @Override

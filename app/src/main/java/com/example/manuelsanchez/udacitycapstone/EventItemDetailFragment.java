@@ -2,6 +2,11 @@ package com.example.manuelsanchez.udacitycapstone;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.app.LoaderManager;
+import android.content.CursorLoader;
+import android.content.Loader;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.widget.RecyclerView;
@@ -19,14 +24,26 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.List;
 
+import static com.example.manuelsanchez.udacitycapstone.EventItemListActivity.*;
 
-public class EventItemDetailFragment extends Fragment implements OnMapReadyCallback {
+
+public class EventItemDetailFragment extends Fragment implements OnMapReadyCallback, LoaderManager.LoaderCallbacks<Cursor> {
 
     public static final String ARG_ITEM_ID = "item_id";
+    public static final String DETAIL_URI = "detail_uri";
 
     private Event mEvent;
     private HeadLinerRecyclerViewAdapter mHeadLinerRecyclerViewAdapter;
     private MapView mMapView;
+
+    private Cursor mCursor;
+    private Uri uri;
+
+    private TextView mVenueTextView;
+    private TextView mDateTextView;
+    private TextView mVenueAddress;
+    private TextView mVenueCityStateZip;
+    private RecyclerView mLineupRecyclerView;
 
     public EventItemDetailFragment() {
     }
@@ -36,47 +53,33 @@ public class EventItemDetailFragment extends Fragment implements OnMapReadyCallb
         super.onCreate(savedInstanceState);
 
         if (getArguments().containsKey(ARG_ITEM_ID)) {
-            mEvent = getArguments().getParcelable(ARG_ITEM_ID);
-
-            Activity activity = this.getActivity();
-            CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
-            if (appBarLayout != null) {
-                appBarLayout.setTitle(mEvent.getHeadLinerName());
-            }
+            uri = getArguments().getParcelable(ARG_ITEM_ID);
         }
+        getLoaderManager().initLoader(EVENT_LOADER, null, this);
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.eventitem_detail, container, false);
-        if (mEvent != null) {
-            ((TextView) rootView.findViewById(R.id.eventitem_detail_venue)).setText(mEvent.getVenueName());
 
-            ((TextView) rootView.findViewById(R.id.eventitem_detail_date)).setText(DateUtil.getFormattedDateString(mEvent.getEventDate()));
-
-            ((TextView) rootView.findViewById(R.id.venue_address)).setText(mEvent.getVenueAddress());
-
-            String venueCityStatePost = mEvent.getVenueCity() + ", " + mEvent.getRegionAbbr() + " " + mEvent.getPostalCode();
-            ((TextView) rootView.findViewById(R.id.venue_city_state_zip)).setText(venueCityStatePost);
-
-            RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.lineup);
-            mHeadLinerRecyclerViewAdapter = new HeadLinerRecyclerViewAdapter(mEvent.getArtists());
-            recyclerView.setAdapter(mHeadLinerRecyclerViewAdapter);
-
-            mMapView = (MapView) rootView.findViewById(R.id.venue_map);
-            mMapView.onCreate(savedInstanceState);
-            mMapView.getMapAsync(this);
-        }
+        mVenueTextView = ((TextView) rootView.findViewById(R.id.eventitem_detail_venue));
+        mDateTextView = ((TextView) rootView.findViewById(R.id.eventitem_detail_date));
+        mVenueAddress = ((TextView) rootView.findViewById(R.id.venue_address));
+        mVenueCityStateZip = ((TextView) rootView.findViewById(R.id.venue_city_state_zip));
+        mLineupRecyclerView = (RecyclerView) rootView.findViewById(R.id.lineup);
+        mMapView = (MapView) rootView.findViewById(R.id.venue_map);
+        mMapView.onCreate(savedInstanceState);
 
         return rootView;
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        LatLng latlng = new LatLng(mEvent.getLatitude(), mEvent.getLongitute());
+        LatLng latlng = new LatLng(mCursor.getDouble(COL_LATITUDE), mCursor.getDouble(COL_LONGITUDE));
         googleMap.addMarker(new MarkerOptions()
                 .position(latlng)
-                .title(mEvent.getVenueName()));
+                .title(mCursor.getString(COL_VENUE)));
 
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, 15));
     }
@@ -99,11 +102,54 @@ public class EventItemDetailFragment extends Fragment implements OnMapReadyCallb
         mMapView.onLowMemory();
     }
 
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        if (uri != null) {
+            return new CursorLoader(getActivity(),
+                    uri,
+                    EVENT_COLUMNS,
+                    null,
+                    null,
+                    null);
+        }
+        return null;
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        mCursor = data;
+        if (data != null && data.moveToFirst()) {
+
+            mMapView.getMapAsync(this);
+            mVenueTextView.setText(data.getString(COL_VENUE));
+            mDateTextView.setText(DateUtil.getFormattedDateString(data.getString(COL_DATE)));
+
+            Activity activity = this.getActivity();
+            CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
+            if (appBarLayout != null) {
+                appBarLayout.setTitle(data.getString(COL_PERFORMER));
+            }
+
+            mVenueAddress.setText(data.getString(COL_VENUE_ADDRESS));
+            String venueCityStatePost = data.getString(COL_VENUE_CITY) + ", " + data.getString(COL_REGION_ABBR) + " " + data.getString(COL_VENUE_POSTAL_CODE);
+            mVenueCityStateZip.setText(venueCityStatePost);
+
+            mHeadLinerRecyclerViewAdapter = new HeadLinerRecyclerViewAdapter(data.getString(COL_PERFORMER).split(","));
+            mLineupRecyclerView.setAdapter(mHeadLinerRecyclerViewAdapter);
+
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+
+    }
+
     public class HeadLinerRecyclerViewAdapter extends RecyclerView.Adapter<HeadLinerRecyclerViewAdapter.ViewHolder> {
 
-        private List<Artist> mValues;
+        private String[] mValues;
 
-        public HeadLinerRecyclerViewAdapter(List<Artist> artists) {
+        public HeadLinerRecyclerViewAdapter(String[] artists) {
             mValues = artists;
         }
 
@@ -115,19 +161,17 @@ public class EventItemDetailFragment extends Fragment implements OnMapReadyCallb
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
-            holder.mItem = mValues.get(position);
-            holder.mPerformer.setText(mValues.get(position).getArtistName());
+            holder.mPerformer.setText(mValues[position]);
         }
 
         @Override
         public int getItemCount() {
-            return mValues.size();
+            return mValues.length;
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {
             public final View mView;
             public final TextView mPerformer;
-            public Artist mItem;
 
             public ViewHolder(View view) {
                 super(view);
