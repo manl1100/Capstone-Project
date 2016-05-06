@@ -29,7 +29,13 @@ public class EventDbHelper extends SQLiteOpenHelper {
                         EventEntry.COLUMN_VENUE + " TEXT NOT NULL, " +
                         EventEntry.COLUMN_COORD_LATITUDE + " REAL NOT NULL, " +
                         EventEntry.COLUMN_COORD_LONGITUDE + " REAL NOT NULL, " +
-                        EventEntry.COLUMN_DATE + " INTEGER NOT NULL " +
+                        EventEntry.COLUMN_DATE + " INTEGER NOT NULL, " +
+                        EventEntry.COLUMN_COUNTRY + " TEXT, " +
+                        EventEntry.COLUMN_REGION + " TEXT, " +
+                        EventEntry.COLUMN_REGION_ABBR + " TEXT, " +
+                        EventEntry.COLUMN_VENUE_CITY + " TEXT NOT NULL, " +
+                        EventEntry.COLUMN_VENUE_ADDRESS + " TEXT NOT NULL, " +
+                        EventEntry.COLUMN_VENUE_POSTAL_CODE + " TEXT " +
                         " );";
 
         final String SQL_CREATE_PERFORMER_TABLE =
