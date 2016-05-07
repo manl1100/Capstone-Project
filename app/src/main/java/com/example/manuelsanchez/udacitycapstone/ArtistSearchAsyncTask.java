@@ -110,7 +110,8 @@ public class ArtistSearchAsyncTask extends AsyncTask<String, Void, List<Artist>>
                     output.add(createArtist(eventArray.getJSONObject(i)));
                 }
             } else {
-                output.add(createArtist(eventObject));
+                JSONObject performer = eventObject.getJSONObject(JSON_PERFORMER);
+                output.add(createArtist(performer));
             }
 
         } catch (JSONException e) {
@@ -120,8 +121,7 @@ public class ArtistSearchAsyncTask extends AsyncTask<String, Void, List<Artist>>
         return output;
     }
 
-    private Artist createArtist(JSONObject jsonObject) throws JSONException {
-        JSONObject performer = jsonObject.getJSONObject(JSON_PERFORMER);
+    private Artist createArtist(JSONObject performer) throws JSONException {
         String name = performer.getString(JSON_STRING_NAME);
         String id = performer.getString(JSON_STRING_PERFORMER_ID);
         Integer eventCount = performer.getInt(JSON_INTEGER_EVENT_COUNT);
