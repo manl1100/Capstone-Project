@@ -145,10 +145,9 @@ public class EventItemListActivity extends AppCompatActivity implements LoaderMa
             mCursor = cursor;
         }
 
-        @Override
-        public long getItemId(int position) {
+        private String getEventId(int position) {
             mCursor.moveToPosition(position);
-            return mCursor.getLong(COL_EVENT_ID);
+            return mCursor.getString(COL_EVENT_ID);
         }
 
         @Override
@@ -168,7 +167,7 @@ public class EventItemListActivity extends AppCompatActivity implements LoaderMa
                 public void onClick(View v) {
                     if (mTwoPane) {
                         Bundle arguments = new Bundle();
-                        arguments.putParcelable(EventItemDetailFragment.ARG_ITEM_ID, holder.mItem);
+                        arguments.putParcelable(EventItemDetailFragment.ARG_ITEM_ID, EventContract.EventEntry.buildEventUriWithId(getEventId(holder.getAdapterPosition())));
                         EventItemDetailFragment fragment = new EventItemDetailFragment();
                         fragment.setArguments(arguments);
                         getFragmentManager().beginTransaction()
@@ -177,7 +176,7 @@ public class EventItemListActivity extends AppCompatActivity implements LoaderMa
                     } else {
                         Context context = v.getContext();
                         Intent intent = new Intent(context, EventItemDetailActivity.class);
-                        intent.putExtra(EventItemDetailFragment.ARG_ITEM_ID, EventContract.EventEntry.buildEventUriWithId(mCursor.getString(COL_EVENT_ID)));
+                        intent.putExtra(EventItemDetailFragment.ARG_ITEM_ID, EventContract.EventEntry.buildEventUriWithId(getEventId(holder.getAdapterPosition())));
                         context.startActivity(intent);
                     }
                 }
