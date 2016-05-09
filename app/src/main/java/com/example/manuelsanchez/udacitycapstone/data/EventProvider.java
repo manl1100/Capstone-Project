@@ -10,6 +10,8 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.support.annotation.Nullable;
 
+import com.example.manuelsanchez.udacitycapstone.Event;
+
 import static com.example.manuelsanchez.udacitycapstone.data.EventContract.*;
 
 public class EventProvider extends ContentProvider {
@@ -20,6 +22,7 @@ public class EventProvider extends ContentProvider {
     private static final int EVENT = 100;
     private static final int EVENT_WITH_ID = 150;
     private static final int PERFORMER = 200;
+    private static final int PERFORMER_WITH_ID = 250;
     private static final int PERFORMEREVENT = 300;
 
     private static UriMatcher buildUriMatcher() {
@@ -30,6 +33,7 @@ public class EventProvider extends ContentProvider {
         matcher.addURI(authority, PATH_EVENT + "/*", EVENT_WITH_ID);
 
         matcher.addURI(authority, PATH_PERFORMER, PERFORMER);
+        matcher.addURI(authority, PATH_PERFORMER + "/*", PERFORMER_WITH_ID);
 
         matcher.addURI(authority, PATH_PERFORMER_EVENT, PERFORMEREVENT);
 
@@ -52,6 +56,7 @@ public class EventProvider extends ContentProvider {
     }
 
     private static final String eventById = EventEntry.TABLE_NAME + "." + EventEntry.COLUMN_EVENT_ID + " = ? ";
+    private static final String eventByPerformerId = PerformerEntry.TABLE_NAME + "." + PerformerEntry.COLUMN_PERFORMER_ID + " = ? ";
 
     @Override
     public boolean onCreate() {
@@ -83,6 +88,18 @@ public class EventProvider extends ContentProvider {
                         projection,
                         eventById,
                         new String[] {eventId},
+                        null,
+                        null,
+                        sortOrder);
+                break;
+            }
+
+            case PERFORMER_WITH_ID: {
+                String performerId = PerformerEntry.getPerformerIdFromUri(uri);
+                returnCursor = eventsQueryBuilder.query(mOpenHelper.getReadableDatabase(),
+                        projection,
+                        eventByPerformerId,
+                        new String[] {performerId},
                         null,
                         null,
                         sortOrder);
