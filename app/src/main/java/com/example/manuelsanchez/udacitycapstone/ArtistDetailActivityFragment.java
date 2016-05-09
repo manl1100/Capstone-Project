@@ -1,25 +1,34 @@
 package com.example.manuelsanchez.udacitycapstone;
 
 import android.app.Activity;
+import android.app.Fragment;
+import android.app.LoaderManager;
+import android.content.CursorLoader;
+import android.content.Loader;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.manuelsanchez.udacitycapstone.data.EventContract;
+
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class ArtistDetailActivityFragment extends Fragment {
+public class ArtistDetailActivityFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     public static final String ARG_ITEM_ID = "item_id";
     private TourDateRecyclerViewAdapter mTourDateRecyclerViewAdapter;
     private Artist mArtist;
+    private RecyclerView mRecyclerView;
+    private String performerId;
 
     public ArtistDetailActivityFragment() {
     }
@@ -30,13 +39,18 @@ public class ArtistDetailActivityFragment extends Fragment {
 
         if (getArguments().containsKey(ARG_ITEM_ID)) {
             mArtist = getArguments().getParcelable(ARG_ITEM_ID);
-
+            if (mArtist != null) {
+                performerId =  mArtist.getEventfulArtistId();
+            }
             Activity activity = this.getActivity();
             CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
             if (appBarLayout != null) {
                 appBarLayout.setTitle(mArtist.getArtistName());
             }
         }
+
+        getLoaderManager().initLoader(EventItemListActivity.EVENT_LOADER, null, this);
+
     }
 
     @Override
@@ -45,21 +59,42 @@ public class ArtistDetailActivityFragment extends Fragment {
 
         if (mArtist != null) {
             ((TextView) view.findViewById(R.id.performing_artist)).setText(mArtist.getArtistName());
-            RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.tour_dates);
-            mTourDateRecyclerViewAdapter = new TourDateRecyclerViewAdapter();
-            recyclerView.setAdapter(mTourDateRecyclerViewAdapter);
-            new EventDetailAsyncTask(getContext(), mTourDateRecyclerViewAdapter).execute(mArtist.getEventfulArtistId());
+            mRecyclerView = (RecyclerView) view.findViewById(R.id.tour_dates);
+            new EventDetailAsyncTask(getActivity()).execute(mArtist.getEventfulArtistId());
         }
 
         return view;
     }
 
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        Uri eventUri = EventContract.PerformerEntry.buildEventUriWithPerformerId(performerId);
+        return new CursorLoader(getActivity(),
+                eventUri,
+                EventItemListActivity.EVENT_COLUMNS,
+                null,
+                null,
+                null);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        TourDateRecyclerViewAdapter adapter = new TourDateRecyclerViewAdapter(data);
+        adapter.setHasStableIds(true);
+        mRecyclerView.setAdapter(adapter);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        mRecyclerView.setAdapter(null);
+    }
+
     public class TourDateRecyclerViewAdapter extends RecyclerView.Adapter<TourDateRecyclerViewAdapter.ViewHolder> {
 
-        private List<Event> mValues;
+        private Cursor cursor;
 
-        public TourDateRecyclerViewAdapter() {
-            this.mValues = new ArrayList<>();
+        public TourDateRecyclerViewAdapter(Cursor cursor) {
+            this.cursor = cursor;
         }
 
         @Override
@@ -70,19 +105,16 @@ public class ArtistDetailActivityFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
-            holder.mItem = mValues.get(position);
-            holder.performanceDate.setText(DateUtil.getFormattedDateString(mValues.get(position).getEventDate()));
-            holder.venue.setText(mValues.get(position).getVenueName());
-            holder.location.setText(mValues.get(position).getVenueAddress());
+            cursor.moveToPosition(position);
+
+            holder.performanceDate.setText(DateUtil.getFormattedDateString(cursor.getString(EventItemListActivity.COL_DATE)));
+            holder.venue.setText(cursor.getString(EventItemListActivity.COL_VENUE));
+            holder.location.setText(cursor.getString(EventItemListActivity.COL_VENUE_ADDRESS));
         }
 
         @Override
         public int getItemCount() {
-            return mValues.size();
-        }
-
-        public void setEventDates(List<Event> events) {
-            mValues = events;
+            return cursor.getCount();
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {
@@ -90,7 +122,6 @@ public class ArtistDetailActivityFragment extends Fragment {
             public final TextView performanceDate;
             public final TextView venue;
             public final TextView location;
-            public Event mItem;
 
             public ViewHolder(View view) {
                 super(view);

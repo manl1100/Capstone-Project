@@ -42,11 +42,11 @@ public class EventContract {
         }
 
         public static Uri buildEventUriWithId(String eventId) {
-            return CONTENT_URI.buildUpon().appendQueryParameter(COLUMN_EVENT_ID, eventId).build();
+            return CONTENT_URI.buildUpon().appendPath(eventId).build();
         }
 
         public static String getEventIdFromUri(Uri uri) {
-            return uri.getQueryParameter(COLUMN_EVENT_ID);
+            return uri.getPathSegments().get(1);
         }
 
         public static Uri buildEventUriWithDateAndLocation(String location, long startDate) {
@@ -65,6 +65,13 @@ public class EventContract {
         public static final String COLUMN_IMAGE_URL = "image_url";
         public static final String COLUMN_PERFORMER_ID = "performer_id";
 
+        public static Uri buildEventUriWithPerformerId(String performerId) {
+            return CONTENT_URI.buildUpon().appendPath(performerId).build();
+        }
+
+        public static String getPerformerIdFromUri(Uri uri) {
+            return uri.getPathSegments().get(1);
+        }
     }
 
     public static final class PerformerEventMapEntry implements BaseColumns {
