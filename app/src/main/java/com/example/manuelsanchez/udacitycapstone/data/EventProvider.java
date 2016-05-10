@@ -41,6 +41,7 @@ public class EventProvider extends ContentProvider {
     }
 
     private static final SQLiteQueryBuilder eventsQueryBuilder = new SQLiteQueryBuilder();
+    private static final SQLiteQueryBuilder eventsByPerformerQueryBuilder = new SQLiteQueryBuilder();
 
     static {
         eventsQueryBuilder.setTables(
@@ -53,10 +54,18 @@ public class EventProvider extends ContentProvider {
                         " ON " + PerformerEntry.TABLE_NAME + "." + PerformerEntry.COLUMN_PERFORMER_ID +
                         " = " + PerformerEventMapEntry.TABLE_NAME + "." + PerformerEventMapEntry.COLUMN_PERFORMER_ID
         );
+
+        eventsByPerformerQueryBuilder.setTables(
+                EventEntry.TABLE_NAME +
+                        " INNER JOIN " + PerformerEventMapEntry.TABLE_NAME +
+                        " ON " + EventEntry.TABLE_NAME + "." + EventEntry.COLUMN_EVENT_ID +
+                        " = " + PerformerEventMapEntry.TABLE_NAME + "." + PerformerEventMapEntry.COLUMN_EVENT_ID
+
+        );
     }
 
     private static final String eventById = EventEntry.TABLE_NAME + "." + EventEntry.COLUMN_EVENT_ID + " = ? ";
-    private static final String eventByPerformerId = PerformerEntry.TABLE_NAME + "." + PerformerEntry.COLUMN_PERFORMER_ID + " = ? ";
+    private static final String eventByPerformerId = PerformerEventMapEntry.TABLE_NAME + "." + PerformerEventMapEntry.COLUMN_PERFORMER_ID + " = ? ";
 
     @Override
     public boolean onCreate() {
@@ -96,7 +105,7 @@ public class EventProvider extends ContentProvider {
 
             case PERFORMER_WITH_ID: {
                 String performerId = PerformerEntry.getPerformerIdFromUri(uri);
-                returnCursor = eventsQueryBuilder.query(mOpenHelper.getReadableDatabase(),
+                returnCursor = eventsByPerformerQueryBuilder.query(mOpenHelper.getReadableDatabase(),
                         projection,
                         eventByPerformerId,
                         new String[] {performerId},
