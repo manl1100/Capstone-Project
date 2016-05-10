@@ -44,9 +44,24 @@ public class EventItemListActivity extends AppCompatActivity implements LoaderMa
     public static final int COL_VENUE_ADDRESS = 10;
     public static final int COL_VENUE_POSTAL_CODE = 11;
 
+    // TODO move to its own file
     public static final String[] EVENT_COLUMNS = {
             EventEntry.TABLE_NAME + "." + EventEntry.COLUMN_EVENT_ID,
             PerformerEntry.COLUMN_PERFORMER_NAME,
+            EventEntry.COLUMN_VENUE,
+            EventEntry.COLUMN_COORD_LATITUDE,
+            EventEntry.COLUMN_COORD_LONGITUDE,
+            EventEntry.COLUMN_DATE,
+            EventEntry.COLUMN_COUNTRY,
+            EventEntry.COLUMN_REGION,
+            EventEntry.COLUMN_REGION_ABBR,
+            EventEntry.COLUMN_VENUE_CITY,
+            EventEntry.COLUMN_VENUE_ADDRESS,
+            EventEntry.COLUMN_VENUE_POSTAL_CODE,
+    };
+
+    public static final String[] PERFORMER_EVENT_COLUMNS = {
+            EventEntry.TABLE_NAME + "." + EventEntry.COLUMN_EVENT_ID,
             EventEntry.COLUMN_VENUE,
             EventEntry.COLUMN_COORD_LATITUDE,
             EventEntry.COLUMN_COORD_LONGITUDE,
