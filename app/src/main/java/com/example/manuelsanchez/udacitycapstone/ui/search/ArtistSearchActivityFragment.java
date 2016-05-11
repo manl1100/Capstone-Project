@@ -1,4 +1,4 @@
-package com.example.manuelsanchez.udacitycapstone;
+package com.example.manuelsanchez.udacitycapstone.ui.search;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.manuelsanchez.udacitycapstone.R;
 import com.example.manuelsanchez.udacitycapstone.model.Artist;
 import com.squareup.picasso.Picasso;
 

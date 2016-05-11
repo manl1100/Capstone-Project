@@ -1,4 +1,4 @@
-package com.example.manuelsanchez.udacitycapstone;
+package com.example.manuelsanchez.udacitycapstone.util;
 
 import java.text.DateFormatSymbols;
 import java.text.ParseException;

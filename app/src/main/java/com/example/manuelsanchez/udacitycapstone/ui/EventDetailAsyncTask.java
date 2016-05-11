@@ -1,4 +1,4 @@
-package com.example.manuelsanchez.udacitycapstone;
+package com.example.manuelsanchez.udacitycapstone.ui;
 
 
 import android.content.ContentValues;
@@ -7,6 +7,8 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.example.manuelsanchez.udacitycapstone.ui.search.PerformerEventDetailAsyncTask;
+import com.example.manuelsanchez.udacitycapstone.R;
 import com.example.manuelsanchez.udacitycapstone.data.EventContract;
 import com.example.manuelsanchez.udacitycapstone.model.Event;
 

@@ -14,7 +14,7 @@
         android:paddingLeft="16dp"
         android:paddingTop="5dp"
         android:textIsSelectable="true"
-        tools:context="com.example.manuelsanchez.udacitycapstone.EventItemDetailFragment" />
+        tools:context=".ui.EventItemDetailFragment" />
 
     <TextView
         android:id="@+id/eventitem_detail_date"
@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:paddingLeft="16dp"
         android:textIsSelectable="true"
-        tools:context="com.example.manuelsanchez.udacitycapstone.EventItemDetailFragment" />
+        tools:context=".ui.EventItemDetailFragment" />
 
 
     <android.support.v7.widget.CardView

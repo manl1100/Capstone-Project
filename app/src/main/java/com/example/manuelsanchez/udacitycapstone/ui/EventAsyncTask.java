@@ -1,4 +1,4 @@
-package com.example.manuelsanchez.udacitycapstone;
+package com.example.manuelsanchez.udacitycapstone.ui;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 
+import com.example.manuelsanchez.udacitycapstone.R;
 import com.example.manuelsanchez.udacitycapstone.model.Artist;
 import com.example.manuelsanchez.udacitycapstone.model.Event;
 

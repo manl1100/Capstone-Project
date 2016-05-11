@@ -1,10 +1,11 @@
-package com.example.manuelsanchez.udacitycapstone;
+package com.example.manuelsanchez.udacitycapstone.ui.search;
 
 import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.example.manuelsanchez.udacitycapstone.R;
 import com.example.manuelsanchez.udacitycapstone.model.Artist;
 
 import org.json.JSONArray;
@@ -20,7 +21,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.manuelsanchez.udacitycapstone.EventfulJsonConstants.*;
+import static com.example.manuelsanchez.udacitycapstone.util.EventfulJsonConstants.*;
 
 
 public class ArtistSearchAsyncTask extends AsyncTask<String, Void, List<Artist>> {
