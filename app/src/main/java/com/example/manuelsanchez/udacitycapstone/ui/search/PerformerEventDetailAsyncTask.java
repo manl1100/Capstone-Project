@@ -8,7 +8,7 @@ import android.util.Log;
 
 import com.example.manuelsanchez.udacitycapstone.R;
 import com.example.manuelsanchez.udacitycapstone.data.EventContract;
-import com.example.manuelsanchez.udacitycapstone.model.Event;
+import com.example.manuelsanchez.udacitycapstone.ui.Event;
 
 import org.json.JSONException;
 import org.json.JSONObject;

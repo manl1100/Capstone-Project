@@ -15,9 +15,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.manuelsanchez.udacitycapstone.util.DateUtil;
 import com.example.manuelsanchez.udacitycapstone.R;
-import com.example.manuelsanchez.udacitycapstone.model.Event;
+import com.example.manuelsanchez.udacitycapstone.util.DateUtil;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;

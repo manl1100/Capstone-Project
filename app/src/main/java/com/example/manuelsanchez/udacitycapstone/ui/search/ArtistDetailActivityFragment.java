@@ -16,12 +16,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.manuelsanchez.udacitycapstone.R;
 import com.example.manuelsanchez.udacitycapstone.util.DateUtil;
 import com.example.manuelsanchez.udacitycapstone.ui.EventDetailAsyncTask;
 import com.example.manuelsanchez.udacitycapstone.ui.EventItemListActivity;
-import com.example.manuelsanchez.udacitycapstone.R;
 import com.example.manuelsanchez.udacitycapstone.data.EventContract;
-import com.example.manuelsanchez.udacitycapstone.model.Artist;
+import com.example.manuelsanchez.udacitycapstone.ui.Artist;
 
 
 public class ArtistDetailActivityFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {

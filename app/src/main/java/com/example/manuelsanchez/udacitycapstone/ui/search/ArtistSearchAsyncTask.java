@@ -6,7 +6,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.example.manuelsanchez.udacitycapstone.R;
-import com.example.manuelsanchez.udacitycapstone.model.Artist;
+import com.example.manuelsanchez.udacitycapstone.ui.Artist;
 
 import org.json.JSONArray;
 import org.json.JSONException;

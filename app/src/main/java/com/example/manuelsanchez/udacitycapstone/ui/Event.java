@@ -1,4 +1,4 @@
-package com.example.manuelsanchez.udacitycapstone.model;
+package com.example.manuelsanchez.udacitycapstone.ui;
 
 import android.os.Parcel;
 import android.os.Parcelable;

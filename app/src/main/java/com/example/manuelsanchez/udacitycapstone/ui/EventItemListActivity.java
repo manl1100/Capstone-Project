@@ -21,7 +21,6 @@ import android.widget.TextView;
 
 import com.example.manuelsanchez.udacitycapstone.R;
 import com.example.manuelsanchez.udacitycapstone.data.EventContract;
-import com.example.manuelsanchez.udacitycapstone.model.Event;
 import com.example.manuelsanchez.udacitycapstone.ui.search.ArtistSearchActivity;
 import com.example.manuelsanchez.udacitycapstone.ui.search.ArtistSearchActivityFragment;
 
