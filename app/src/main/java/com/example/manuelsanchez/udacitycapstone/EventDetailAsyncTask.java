@@ -114,7 +114,7 @@ public class EventDetailAsyncTask extends AsyncTask<String, Void, List<Event>> {
                 performerEvent.put(EventContract.PerformerEventMapEntry.COLUMN_EVENT_ID, eventId);
                 performerEvent.put(EventContract.PerformerEventMapEntry.COLUMN_PERFORMER_ID, artistId);
                 performerEventVector.add(performerEvent);
-                new PerformerEventDetailAsyncTask(mContext, eventId);
+                new PerformerEventDetailAsyncTask(mContext, eventId).execute(eventId);
             }
 
             ContentValues[] values = new ContentValues[performerEventVector.size()];

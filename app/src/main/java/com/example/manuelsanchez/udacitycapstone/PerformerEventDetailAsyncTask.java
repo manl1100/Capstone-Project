@@ -43,7 +43,7 @@ public class PerformerEventDetailAsyncTask extends AsyncTask<String, Void, Void>
         String concertString = null;
 
         try {
-            String urlBase = "http://api.eventful.com/json/performers/events/list?";
+            String urlBase = "http://api.eventful.com/json/events/get?";
             String apiKeyParam = "app_key";
             String apiKey = mContext.getString(R.string.eventful_api_key);
             String performerIdParam = "id";
@@ -110,16 +110,16 @@ public class PerformerEventDetailAsyncTask extends AsyncTask<String, Void, Void>
         final String JSON_STRING_ARTIST = "name";
         final String JSON_STRING_REGION_ABBR = "region_abbr";
         final String JSON_STRING_POSTAL_CODE = "postal_code";
-        final String JSON_STRING_VENUE_ADDRESS = "venue_address";
-        final String JSON_STRING_VENUE_CITY = "city_name";
+        final String JSON_STRING_VENUE_ADDRESS = "address";
+        final String JSON_STRING_VENUE_CITY = "city";
         final String JSON_STRING_COUNTRY = "country";
         final String JSON_STRING_ID = "id";
 
         try {
             JSONObject responseObject = new JSONObject(response);
             ContentValues contentValues = new ContentValues();
-            contentValues.put(EventEntry.COLUMN_EVENT_ID, responseObject.getString(JSON_STRING_VENUE_NAME));
-            contentValues.put(EventEntry.COLUMN_VENUE, responseObject.getString(eventId));
+            contentValues.put(EventEntry.COLUMN_EVENT_ID, eventId);
+            contentValues.put(EventEntry.COLUMN_VENUE, responseObject.getString(JSON_STRING_VENUE_NAME));
             contentValues.put(EventEntry.COLUMN_COORD_LATITUDE, responseObject.getString(JSON_DOUBLE_LATITUDE));
             contentValues.put(EventEntry.COLUMN_COORD_LONGITUDE, responseObject.getString(JSON_DOUBLE_LONGITUDE));
             contentValues.put(EventEntry.COLUMN_DATE, responseObject.getString(JSON_STRING_DATE));
