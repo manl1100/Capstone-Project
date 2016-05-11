@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.manuelsanchez.udacitycapstone.data.EventContract;
+import com.example.manuelsanchez.udacitycapstone.model.Artist;
 
 import java.util.ArrayList;
 import java.util.List;

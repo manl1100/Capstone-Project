@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.example.manuelsanchez.udacitycapstone.data.EventContract;
+import com.example.manuelsanchez.udacitycapstone.model.Event;
 
 import org.json.JSONException;
 import org.json.JSONObject;

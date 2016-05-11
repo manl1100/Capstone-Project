@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.manuelsanchez.udacitycapstone.model.Artist;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;

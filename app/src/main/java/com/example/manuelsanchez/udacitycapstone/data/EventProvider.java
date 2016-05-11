@@ -10,8 +10,6 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.support.annotation.Nullable;
 
-import com.example.manuelsanchez.udacitycapstone.Event;
-
 import static com.example.manuelsanchez.udacitycapstone.data.EventContract.*;
 
 public class EventProvider extends ContentProvider {
