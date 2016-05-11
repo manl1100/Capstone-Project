@@ -108,8 +108,8 @@ public class ArtistDetailActivityFragment extends Fragment implements LoaderMana
             cursor.moveToPosition(position);
 
             holder.performanceDate.setText(DateUtil.getFormattedDateString(cursor.getString(EventItemListActivity.COL_DATE)));
-            holder.venue.setText(cursor.getString(EventItemListActivity.COL_VENUE));
-            holder.location.setText(cursor.getString(EventItemListActivity.COL_VENUE_ADDRESS));
+            holder.venue.setText(cursor.getString(1));
+            holder.location.setText(cursor.getString(4));
         }
 
         @Override
