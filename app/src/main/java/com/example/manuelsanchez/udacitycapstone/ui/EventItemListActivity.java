@@ -6,12 +6,16 @@ import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.Preference;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -39,6 +43,11 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
+import java.util.prefs.Preferences;
+
 import static com.example.manuelsanchez.udacitycapstone.data.EventContract.*;
 
 
@@ -53,6 +62,8 @@ public class EventItemListActivity extends AppCompatActivity implements LoaderMa
     private Location mLastLocation;
 
     LocationRequest mLocationRequest;
+
+    private static final String LOCATION_PREF = "locationPref";
 
     private static final int REQUEST_COARSE_LOCATION_PERMISSION = 0;
 
@@ -191,7 +202,6 @@ public class EventItemListActivity extends AppCompatActivity implements LoaderMa
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -264,9 +274,23 @@ public class EventItemListActivity extends AppCompatActivity implements LoaderMa
     }
 
     private void handleNewLocation(Location location) {
-        String lat = String.valueOf(mLastLocation.getLatitude());
-        String lon = String.valueOf(mLastLocation.getLongitude());
-        Toast.makeText(getApplicationContext(), "Lat: " + lat + "; Long: " + lon, Toast.LENGTH_LONG).show();
+        mLastLocation = location;
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+        try {
+            List<Address> addressList = geocoder.getFromLocation(mLastLocation.getLatitude(), mLastLocation.getLongitude(), 1);
+            SharedPreferences settings = getSharedPreferences(LOCATION_PREF, 0);
+            if (addressList.size() > 0) {
+                SharedPreferences.Editor editor = settings.edit();
+                editor.putString("ConcertLocationFilter", addressList.get(0).getLocality());
+                editor.apply();
+            } else {
+                Toast.makeText(getApplicationContext(), "Where are you?", Toast.LENGTH_LONG).show();
+                return;
+            }
+            Toast.makeText(getApplicationContext(), "Location:" + addressList.get(0).getAdminArea() + "," + addressList.get(0).getLocality(), Toast.LENGTH_LONG).show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
