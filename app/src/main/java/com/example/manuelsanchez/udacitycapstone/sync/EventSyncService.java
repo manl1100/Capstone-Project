@@ -12,16 +12,19 @@ public class EventSyncService extends Service {
 
     private static final Object syncAdapterLock = new Object();
 
-    @Nullable
-    @Override
-    public IBinder onBind(Intent intent) {
 
+    @Override
+    public void onCreate() {
         synchronized (syncAdapterLock) {
             if (eventSyncAdapter == null) {
                 eventSyncAdapter = new EventSyncAdapter(getApplicationContext(), true);
             }
-
         }
-        return null;
+    }
+
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return eventSyncAdapter.getSyncAdapterBinder();
     }
 }
