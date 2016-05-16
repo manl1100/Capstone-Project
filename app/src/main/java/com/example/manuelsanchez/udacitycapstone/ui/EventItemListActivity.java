@@ -49,68 +49,21 @@ import java.util.Locale;
 import java.util.prefs.Preferences;
 
 import static com.example.manuelsanchez.udacitycapstone.data.EventContract.*;
+import static com.example.manuelsanchez.udacitycapstone.ui.EventLoader.*;
 
 
 public class EventItemListActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     public static final String LOG_TAG = EventItemListActivity.class.getSimpleName();
 
-    private boolean mTwoPane;
-    private RecyclerView recyclerView;
-
-    private GoogleApiClient mGoogleApiClient;
-    private Location mLastLocation;
-
-    LocationRequest mLocationRequest;
-
     private static final String LOCATION_PREF = "locationPref";
-
     private static final int REQUEST_COARSE_LOCATION_PERMISSION = 0;
 
-    public static final int COL_EVENT_ID = 0;
-    public static final int COL_PERFORMER = 1;
-    public static final int COL_VENUE = 2;
-    public static final int COL_LATITUDE = 3;
-    public static final int COL_LONGITUDE = 4;
-    public static final int COL_DATE = 5;
-    public static final int COL_COUNTRY = 6;
-    public static final int COL_REGION = 7;
-    public static final int COL_REGION_ABBR = 8;
-    public static final int COL_VENUE_CITY = 9;
-    public static final int COL_VENUE_ADDRESS = 10;
-    public static final int COL_VENUE_POSTAL_CODE = 11;
-
-    // TODO move to its own file
-    public static final String[] EVENT_COLUMNS = {
-            EventEntry.TABLE_NAME + "." + EventEntry.COLUMN_EVENT_ID,
-            PerformerEntry.COLUMN_PERFORMER_NAME,
-            EventEntry.COLUMN_VENUE,
-            EventEntry.COLUMN_COORD_LATITUDE,
-            EventEntry.COLUMN_COORD_LONGITUDE,
-            EventEntry.COLUMN_DATE,
-            EventEntry.COLUMN_COUNTRY,
-            EventEntry.COLUMN_REGION,
-            EventEntry.COLUMN_REGION_ABBR,
-            EventEntry.COLUMN_VENUE_CITY,
-            EventEntry.COLUMN_VENUE_ADDRESS,
-            EventEntry.COLUMN_VENUE_POSTAL_CODE,
-    };
-
-    public static final String[] PERFORMER_EVENT_COLUMNS = {
-            EventEntry.TABLE_NAME + "." + EventEntry.COLUMN_EVENT_ID,
-            EventEntry.COLUMN_VENUE,
-            EventEntry.COLUMN_COORD_LATITUDE,
-            EventEntry.COLUMN_COORD_LONGITUDE,
-            EventEntry.COLUMN_DATE,
-            EventEntry.COLUMN_COUNTRY,
-            EventEntry.COLUMN_REGION,
-            EventEntry.COLUMN_REGION_ABBR,
-            EventEntry.COLUMN_VENUE_CITY,
-            EventEntry.COLUMN_VENUE_ADDRESS,
-            EventEntry.COLUMN_VENUE_POSTAL_CODE,
-    };
-
-    public static final int EVENT_LOADER = 0;
+    private boolean mTwoPane;
+    private RecyclerView recyclerView;
+    private GoogleApiClient mGoogleApiClient;
+    private Location mLastLocation;
+    private LocationRequest mLocationRequest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
