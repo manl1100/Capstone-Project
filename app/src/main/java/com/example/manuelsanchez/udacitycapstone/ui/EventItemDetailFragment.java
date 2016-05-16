@@ -24,6 +24,8 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import static com.example.manuelsanchez.udacitycapstone.ui.EventLoader.*;
+
 
 public class EventItemDetailFragment extends Fragment implements OnMapReadyCallback, LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -53,7 +55,7 @@ public class EventItemDetailFragment extends Fragment implements OnMapReadyCallb
         if (getArguments().containsKey(ARG_ITEM_ID)) {
             uri = getArguments().getParcelable(ARG_ITEM_ID);
         }
-        getLoaderManager().initLoader(EventItemListActivity.EVENT_LOADER, null, this);
+        getLoaderManager().initLoader(EVENT_LOADER, null, this);
 
     }
 
@@ -74,10 +76,10 @@ public class EventItemDetailFragment extends Fragment implements OnMapReadyCallb
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        LatLng latlng = new LatLng(mCursor.getDouble(EventItemListActivity.COL_LATITUDE), mCursor.getDouble(EventItemListActivity.COL_LONGITUDE));
+        LatLng latlng = new LatLng(mCursor.getDouble(COL_LATITUDE), mCursor.getDouble(COL_LONGITUDE));
         googleMap.addMarker(new MarkerOptions()
                 .position(latlng)
-                .title(mCursor.getString(EventItemListActivity.COL_VENUE)));
+                .title(mCursor.getString(COL_VENUE)));
 
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, 15));
     }
@@ -105,7 +107,7 @@ public class EventItemDetailFragment extends Fragment implements OnMapReadyCallb
         if (uri != null) {
             return new CursorLoader(getActivity(),
                     uri,
-                    EventItemListActivity.EVENT_COLUMNS,
+                    EVENT_COLUMNS,
                     null,
                     null,
                     null);
@@ -119,20 +121,20 @@ public class EventItemDetailFragment extends Fragment implements OnMapReadyCallb
         if (data != null && data.moveToFirst()) {
 
             mMapView.getMapAsync(this);
-            mVenueTextView.setText(data.getString(EventItemListActivity.COL_VENUE));
-            mDateTextView.setText(DateUtil.getFormattedDateString(data.getString(EventItemListActivity.COL_DATE)));
+            mVenueTextView.setText(data.getString(COL_VENUE));
+            mDateTextView.setText(DateUtil.getFormattedDateString(data.getString(COL_DATE)));
 
             Activity activity = this.getActivity();
             CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
             if (appBarLayout != null) {
-                appBarLayout.setTitle(data.getString(EventItemListActivity.COL_PERFORMER));
+                appBarLayout.setTitle(data.getString(COL_PERFORMER));
             }
 
-            mVenueAddress.setText(data.getString(EventItemListActivity.COL_VENUE_ADDRESS));
-            String venueCityStatePost = data.getString(EventItemListActivity.COL_VENUE_CITY) + ", " + data.getString(EventItemListActivity.COL_REGION_ABBR) + " " + data.getString(EventItemListActivity.COL_VENUE_POSTAL_CODE);
+            mVenueAddress.setText(data.getString(COL_VENUE_ADDRESS));
+            String venueCityStatePost = data.getString(COL_VENUE_CITY) + ", " + data.getString(COL_REGION_ABBR) + " " + data.getString(COL_VENUE_POSTAL_CODE);
             mVenueCityStateZip.setText(venueCityStatePost);
 
-            mHeadLinerRecyclerViewAdapter = new HeadLinerRecyclerViewAdapter(data.getString(EventItemListActivity.COL_PERFORMER).split(","));
+            mHeadLinerRecyclerViewAdapter = new HeadLinerRecyclerViewAdapter(data.getString(COL_PERFORMER).split(","));
             mLineupRecyclerView.setAdapter(mHeadLinerRecyclerViewAdapter);
 
         }
