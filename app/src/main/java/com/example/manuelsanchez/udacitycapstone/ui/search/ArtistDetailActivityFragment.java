@@ -17,11 +17,12 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.manuelsanchez.udacitycapstone.R;
-import com.example.manuelsanchez.udacitycapstone.util.DateUtil;
+import com.example.manuelsanchez.udacitycapstone.util.Utility;
 import com.example.manuelsanchez.udacitycapstone.ui.EventDetailAsyncTask;
-import com.example.manuelsanchez.udacitycapstone.ui.EventItemListActivity;
 import com.example.manuelsanchez.udacitycapstone.data.EventContract;
 import com.example.manuelsanchez.udacitycapstone.ui.Artist;
+
+import static com.example.manuelsanchez.udacitycapstone.ui.EventLoader.*;
 
 
 public class ArtistDetailActivityFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
@@ -51,7 +52,7 @@ public class ArtistDetailActivityFragment extends Fragment implements LoaderMana
             }
         }
 
-        getLoaderManager().initLoader(EventItemListActivity.EVENT_LOADER, null, this);
+        getLoaderManager().initLoader(EVENT_LOADER, null, this);
 
     }
 
@@ -73,7 +74,7 @@ public class ArtistDetailActivityFragment extends Fragment implements LoaderMana
         Uri eventUri = EventContract.PerformerEntry.buildEventUriWithPerformerId(performerId);
         return new CursorLoader(getActivity(),
                 eventUri,
-                EventItemListActivity.PERFORMER_EVENT_COLUMNS,
+                PERFORMER_EVENT_COLUMNS,
                 null,
                 null,
                 null);
@@ -109,7 +110,7 @@ public class ArtistDetailActivityFragment extends Fragment implements LoaderMana
         public void onBindViewHolder(final ViewHolder holder, int position) {
             cursor.moveToPosition(position);
 
-            holder.performanceDate.setText(DateUtil.getFormattedDateString(cursor.getString(EventItemListActivity.COL_DATE)));
+            holder.performanceDate.setText(Utility.getFormattedDateString(cursor.getString(COL_DATE)));
             holder.venue.setText(cursor.getString(1));
             holder.location.setText(cursor.getString(4));
         }

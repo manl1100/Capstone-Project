@@ -9,7 +9,7 @@ import java.util.GregorianCalendar;
 
 
 
-public class DateUtil {
+public class Utility {
 
     private static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
     private static String[] months = new DateFormatSymbols().getMonths();

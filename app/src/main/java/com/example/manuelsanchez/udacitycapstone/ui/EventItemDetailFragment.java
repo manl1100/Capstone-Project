@@ -16,7 +16,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.manuelsanchez.udacitycapstone.R;
-import com.example.manuelsanchez.udacitycapstone.util.DateUtil;
+import com.example.manuelsanchez.udacitycapstone.util.Utility;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -122,7 +122,7 @@ public class EventItemDetailFragment extends Fragment implements OnMapReadyCallb
 
             mMapView.getMapAsync(this);
             mVenueTextView.setText(data.getString(COL_VENUE));
-            mDateTextView.setText(DateUtil.getFormattedDateString(data.getString(COL_DATE)));
+            mDateTextView.setText(Utility.getFormattedDateString(data.getString(COL_DATE)));
 
             Activity activity = this.getActivity();
             CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
