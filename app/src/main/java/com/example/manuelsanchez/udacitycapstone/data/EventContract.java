@@ -101,7 +101,7 @@ public class EventContract {
         }
 
         public static long getLocationFromUri(Uri uri) {
-            return Long.parseLong(uri.getPathSegments().get(2));
+            return Long.parseLong(uri.getPathSegments().get(1));
         }
     }
 }

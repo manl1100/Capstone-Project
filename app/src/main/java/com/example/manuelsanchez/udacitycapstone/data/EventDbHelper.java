@@ -35,7 +35,8 @@ public class EventDbHelper extends SQLiteOpenHelper {
                         EventEntry.COLUMN_REGION_ABBR + " TEXT, " +
                         EventEntry.COLUMN_VENUE_CITY + " TEXT NOT NULL, " +
                         EventEntry.COLUMN_VENUE_ADDRESS + " TEXT NOT NULL, " +
-                        EventEntry.COLUMN_VENUE_POSTAL_CODE + " TEXT " +
+                        EventEntry.COLUMN_VENUE_POSTAL_CODE + " TEXT, " +
+                        EventEntry.COLUMN_LOCATION_SETTING_ID + " TEXT NOT NULL" +
                         " );";
 
         final String SQL_CREATE_PERFORMER_TABLE =
@@ -53,9 +54,16 @@ public class EventDbHelper extends SQLiteOpenHelper {
                         PerformerEventMapEntry.COLUMN_EVENT_ID + " TEXT NOT NULL " +
                         " );";
 
+        final String SQL_CREATE_LOCATION_TABLE =
+                "CREATE TABLE " + LocationEntry.TABLE_NAME + " (" +
+                        LocationEntry._ID + " INTEGER PRIMARY KEY, " +
+                        LocationEntry.COLUMN_LOCATION_SETTING + " TEXT NOT NULL" +
+                        " );";
+
         db.execSQL(SQL_CREATE_EVENT_TABLE);
         db.execSQL(SQL_CREATE_PERFORMER_TABLE);
         db.execSQL(SQL_CREATE_PERFORMER_EVENT_MAP_TABLE);
+        db.execSQL(SQL_CREATE_LOCATION_TABLE);
     }
 
     @Override
