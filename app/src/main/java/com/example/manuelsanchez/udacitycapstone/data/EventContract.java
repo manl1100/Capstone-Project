@@ -36,6 +36,7 @@ public class EventContract {
         public static final String COLUMN_VENUE_CITY = "venue_city";
         public static final String COLUMN_VENUE_ADDRESS = "venue_address";
         public static final String COLUMN_VENUE_POSTAL_CODE = "venue_postal_code";
+        public static final String COLUMN_LOCATION_SETTING_ID = "location_setting_id";
 
         public static Uri buildEventUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);
@@ -93,8 +94,14 @@ public class EventContract {
         public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY +"/" + PATH_EVENT;
 
         public static final String TABLE_NAME =  "location";
-        public static final String COLUMN_CITY = "city";
-        public static final String COLUMN_COUNTRY = "country";
+        public static final String COLUMN_LOCATION_SETTING = "location_setting";
 
+        public static Uri buildLocationUri(long id) {
+            return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
+
+        public static long getLocationFromUri(Uri uri) {
+            return Long.parseLong(uri.getPathSegments().get(2));
+        }
     }
 }
