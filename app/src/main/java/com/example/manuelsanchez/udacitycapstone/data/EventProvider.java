@@ -22,6 +22,7 @@ public class EventProvider extends ContentProvider {
     private static final int PERFORMER = 200;
     private static final int PERFORMER_WITH_ID = 250;
     private static final int PERFORMEREVENT = 300;
+    private static final int LOCATION = 400;
 
     private static UriMatcher buildUriMatcher() {
         final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
@@ -35,6 +36,7 @@ public class EventProvider extends ContentProvider {
 
         matcher.addURI(authority, PATH_PERFORMER_EVENT, PERFORMEREVENT);
 
+        matcher.addURI(authority, PATH_LOCATION, LOCATION);
         return matcher;
     }
 
@@ -148,6 +150,17 @@ public class EventProvider extends ContentProvider {
                 }
                 break;
             }
+
+            case LOCATION: {
+                long id = db.insert(LocationEntry.TABLE_NAME, null, values);
+                if (id > 0) {
+                    returnUri = LocationEntry.buildLocationUri(id);
+                } else {
+                    throw new android.database.SQLException("Failed to insert row into " + uri);
+                }
+                break;
+            }
+
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
