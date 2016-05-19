@@ -2,12 +2,14 @@ package com.example.manuelsanchez.udacitycapstone.ui;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
 
 import com.example.manuelsanchez.udacitycapstone.R;
+import com.example.manuelsanchez.udacitycapstone.util.Utility;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -46,6 +48,9 @@ public class EventAsyncTask extends AsyncTask<String, Void, List<Event>> {
         BufferedReader reader = null;
         String concertString = null;
 
+        String location = Utility.getPreferredLocation(mContext);
+
+
         try {
             String urlBase = "http://api.eventful.com/json/events/search?";
             String apiKeyParam = "app_key";
@@ -53,7 +58,6 @@ public class EventAsyncTask extends AsyncTask<String, Void, List<Event>> {
             String categoryParam = "category";
             String categoryParamValue = "music";
             String locationParam = "location";
-            String locationParamValue = "75209";
             String withinParam = "within";
             String withinParamValue = "50";
             String unitParam = "units";
@@ -69,7 +73,7 @@ public class EventAsyncTask extends AsyncTask<String, Void, List<Event>> {
             Uri builtUri = Uri.parse(urlBase).buildUpon()
                     .appendQueryParameter(apiKeyParam, apiKey)
                     .appendQueryParameter(categoryParam, categoryParamValue)
-                    .appendQueryParameter(locationParam, locationParamValue)
+                    .appendQueryParameter(locationParam, location)
                     .appendQueryParameter(withinParam, withinParamValue)
                     .appendQueryParameter(unitParam, unitParamValue)
                     .appendQueryParameter(sortOrderParam, sortOrderValue)
@@ -117,11 +121,11 @@ public class EventAsyncTask extends AsyncTask<String, Void, List<Event>> {
             }
         }
 
-        return parseConcertString(concertString);
+        return parseConcertString(concertString, location);
 
     }
 
-    private List<Event> parseConcertString(String response) {
+    private List<Event> parseConcertString(String response, String location) {
 
         // TODO: Move to constants file
         final String JSON_OBJECT_EVENT = "events";
@@ -147,6 +151,7 @@ public class EventAsyncTask extends AsyncTask<String, Void, List<Event>> {
         Vector<ContentValues> performerVector = new Vector<>();
         Vector<ContentValues> performerEventVector = new Vector<>();
 
+        long locationId = addLocation(location);
 
         try {
             JSONObject responseObject = new JSONObject(response);
@@ -203,6 +208,7 @@ public class EventAsyncTask extends AsyncTask<String, Void, List<Event>> {
                 eventValues.put(EventEntry.COLUMN_VENUE_CITY, event.getVenueCity());
                 eventValues.put(EventEntry.COLUMN_VENUE_ADDRESS, event.getVenueAddress());
                 eventValues.put(EventEntry.COLUMN_VENUE_POSTAL_CODE, event.getPostalCode());
+                eventValues.put(EventEntry.COLUMN_LOCATION_SETTING_ID, locationId);
                 eventsVector.add(eventValues);
 
                 for (Artist artist : artistList) {
@@ -235,6 +241,30 @@ public class EventAsyncTask extends AsyncTask<String, Void, List<Event>> {
         ContentValues[] values = new ContentValues[contentValues.size()];
         contentValues.toArray(values);
         mContext.getContentResolver().bulkInsert(contentUri, values);
+    }
+
+    private long addLocation(String location) {
+        long id;
+
+        Cursor locationCursor = mContext.getContentResolver().query(
+                LocationEntry.CONTENT_URI,
+                new String[]{LocationEntry._ID},
+                LocationEntry.COLUMN_LOCATION_SETTING + " = ?",
+                new String[]{location},
+                null);
+
+        if (locationCursor.moveToFirst()) {
+            int locationIdIndex = locationCursor.getColumnIndex(LocationEntry._ID);
+            id = locationCursor.getLong(locationIdIndex);
+        } else {
+            ContentValues locationValues = new ContentValues();
+            locationValues.put(LocationEntry.COLUMN_LOCATION_SETTING, location);
+            Uri uri = mContext.getContentResolver().insert(LocationEntry.CONTENT_URI, locationValues);
+            id = LocationEntry.getLocationFromUri(uri);
+        }
+        return id;
+
+
     }
 
 }

@@ -16,6 +16,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.Preference;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -231,10 +232,10 @@ public class EventItemListActivity extends AppCompatActivity implements LoaderMa
         Geocoder geocoder = new Geocoder(this, Locale.getDefault());
         try {
             List<Address> addressList = geocoder.getFromLocation(mLastLocation.getLatitude(), mLastLocation.getLongitude(), 1);
-            SharedPreferences settings = getSharedPreferences(LOCATION_PREF, 0);
+            SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
             if (addressList.size() > 0) {
                 SharedPreferences.Editor editor = settings.edit();
-                editor.putString("ConcertLocationFilter", addressList.get(0).getLocality());
+                editor.putString("location", addressList.get(0).getLocality());
                 editor.apply();
             } else {
                 Toast.makeText(getApplicationContext(), "Where are you?", Toast.LENGTH_LONG).show();
