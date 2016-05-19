@@ -96,7 +96,7 @@ public class EventProvider extends ContentProvider {
                 returnCursor = eventsQueryBuilder.query(mOpenHelper.getReadableDatabase(),
                         projection,
                         eventById,
-                        new String[] {eventId},
+                        new String[]{eventId},
                         null,
                         null,
                         sortOrder);
@@ -108,10 +108,23 @@ public class EventProvider extends ContentProvider {
                 returnCursor = eventsByPerformerQueryBuilder.query(mOpenHelper.getReadableDatabase(),
                         projection,
                         eventByPerformerId,
-                        new String[] {performerId},
+                        new String[]{performerId},
                         null,
                         null,
                         sortOrder);
+                break;
+            }
+
+            case LOCATION: {
+                returnCursor = mOpenHelper.getReadableDatabase().query(
+                        LocationEntry.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder
+                );
                 break;
             }
 
@@ -203,7 +216,7 @@ public class EventProvider extends ContentProvider {
     }
 
     private int bulkInsert(ContentValues[] contentValues, String tableName) {
-        final SQLiteDatabase database =  mOpenHelper.getWritableDatabase();
+        final SQLiteDatabase database = mOpenHelper.getWritableDatabase();
         database.beginTransaction();
         int count = 0;
         try {
@@ -215,7 +228,7 @@ public class EventProvider extends ContentProvider {
             }
             database.setTransactionSuccessful();
         } finally {
-          database.endTransaction();
+            database.endTransaction();
         }
 
         return count;
