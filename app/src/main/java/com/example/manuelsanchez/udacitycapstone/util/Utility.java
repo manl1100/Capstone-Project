@@ -1,5 +1,9 @@
 package com.example.manuelsanchez.udacitycapstone.util;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+
 import java.text.DateFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -31,6 +35,11 @@ public class Utility {
             e.printStackTrace();
         }
         return "";
+    }
+
+    public static String getPreferredLocation(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getString("location", "Dallas");
     }
 
 
