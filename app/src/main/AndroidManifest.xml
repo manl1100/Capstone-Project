@@ -65,6 +65,31 @@
             android:name=".data.EventProvider"
             android:exported="false"
             android:syncable="true"/>
+
+
+        <service android:name=".sync.EventAuthenticatorService">
+            <intent-filter>
+                <action android:name="android.accounts.AccountAuthenticator" />
+            </intent-filter>
+            <meta-data
+                android:name="android.accounts.AccountAuthenticator"
+                android:resource="@xml/authenticator" />
+        </service>
+
+        <service android:name=".sync.EventSyncService"
+            android:exported="true"
+            android:process=":sync"
+            android:permission="">
+            <intent-filter>
+                <action android:name="android.content.SyncAdapter"/>
+            </intent-filter>
+            <meta-data
+                android:name="android.content.SyncAdapter"
+                android:resource="@xml/syncadapter"/>
+        </service>
+
     </application>
+
+
 
 </manifest>
