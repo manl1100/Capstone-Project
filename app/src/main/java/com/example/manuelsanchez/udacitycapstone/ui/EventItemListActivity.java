@@ -22,6 +22,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.ActionMode;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -35,6 +36,7 @@ import android.widget.Toast;
 
 import com.example.manuelsanchez.udacitycapstone.R;
 import com.example.manuelsanchez.udacitycapstone.data.EventContract;
+import com.example.manuelsanchez.udacitycapstone.sync.EventSyncAdapter;
 import com.example.manuelsanchez.udacitycapstone.ui.search.ArtistSearchActivity;
 import com.example.manuelsanchez.udacitycapstone.ui.search.ArtistSearchActivityFragment;
 import com.google.android.gms.common.ConnectionResult;
@@ -111,6 +113,12 @@ public class EventItemListActivity extends AppCompatActivity implements LoaderMa
                 .setInterval(10 * 1000)        // 10 seconds, in milliseconds
                 .setFastestInterval(1 * 1000); // 1 second, in milliseconds
 
+        EventSyncAdapter.syncImmediately(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         getLoaderManager().initLoader(EVENT_LOADER, null, this);
     }
 
