@@ -8,7 +8,7 @@
 
 
     <string name="sync_account_type">udacitycapstone.example.com</string>
-    <string name="content_authority">com.example.udacitycapstone</string>
+    <string name="content_authority">com.example.udacitycapstone.app</string>
 
 
     <string name="google_maps_api_key">INSERT_GOOGLE_MAPS_API</string>
