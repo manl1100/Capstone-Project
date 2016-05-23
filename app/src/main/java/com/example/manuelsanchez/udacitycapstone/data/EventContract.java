@@ -8,7 +8,7 @@ import android.provider.BaseColumns;
 
 public class EventContract {
 
-    public static final String CONTENT_AUTHORITY = "com.example.android.udacitycapstone.app";
+    public static final String CONTENT_AUTHORITY = "com.example.udacitycapstone.app";
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
 
     public static final String PATH_EVENT = "event";

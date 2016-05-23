@@ -40,7 +40,7 @@ import static com.example.manuelsanchez.udacitycapstone.data.EventContract.*;
 
 public class EventSyncAdapter extends AbstractThreadedSyncAdapter {
 
-    private final String LOG_TAG = EventSyncAdapter.class.getSimpleName();
+    private static final String LOG_TAG = EventSyncAdapter.class.getSimpleName();
 
     public static final int SYNC_INTERVAL = 60 * 180;
     public static final int SYNC_FLEXTIME = SYNC_INTERVAL/3;
@@ -284,7 +284,8 @@ public class EventSyncAdapter extends AbstractThreadedSyncAdapter {
 
         // if password doesnt exist neither does the account
         if (accountManager.getPassword(newAccount) == null) {
-            if (!accountManager.addAccountExplicitly(newAccount, null, null)) {
+            if (!accountManager.addAccountExplicitly(newAccount, "", null)) {
+                Log.e(LOG_TAG, "EventSyncAdapter.getSyncAccount: problem creating account");
                 return null;
             }
             onAccountCreated(newAccount, context);

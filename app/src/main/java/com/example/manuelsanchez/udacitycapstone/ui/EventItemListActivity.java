@@ -59,7 +59,6 @@ public class EventItemListActivity extends AppCompatActivity implements LoaderMa
 
     public static final String LOG_TAG = EventItemListActivity.class.getSimpleName();
 
-    private static final String LOCATION_PREF = "locationPref";
     private static final int REQUEST_COARSE_LOCATION_PERMISSION = 0;
 
     private boolean mTwoPane;
@@ -94,6 +93,8 @@ public class EventItemListActivity extends AppCompatActivity implements LoaderMa
             }
         });
 
+        getLoaderManager().initLoader(EVENT_LOADER, null, this);
+
         recyclerView = (RecyclerView) findViewById(R.id.eventitem_list);
 
         if (findViewById(R.id.eventitem_detail_container) != null) {
@@ -113,13 +114,7 @@ public class EventItemListActivity extends AppCompatActivity implements LoaderMa
                 .setInterval(10 * 1000)        // 10 seconds, in milliseconds
                 .setFastestInterval(1 * 1000); // 1 second, in milliseconds
 
-        EventSyncAdapter.syncImmediately(this);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        getLoaderManager().initLoader(EVENT_LOADER, null, this);
+        EventSyncAdapter.initializeSyncAdapter(this);
     }
 
     @Override
@@ -184,19 +179,19 @@ public class EventItemListActivity extends AppCompatActivity implements LoaderMa
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case REQUEST_COARSE_LOCATION_PERMISSION: {
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-                    if (mLastLocation != null) {
-                        handleNewLocation(mLastLocation);
-                    } else {
-                        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
-                    }
-                }
-            }
-
-        }
+//        switch (requestCode) {
+//            case REQUEST_COARSE_LOCATION_PERMISSION: {
+//                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                    mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+//                    if (mLastLocation != null) {
+//                        handleNewLocation(mLastLocation);
+//                    } else {
+//                        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+//                    }
+//                }
+//            }
+//
+//        }
     }
 
     @Override
