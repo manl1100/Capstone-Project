@@ -93,7 +93,6 @@ public class EventItemListActivity extends AppCompatActivity implements LoaderMa
             }
         });
 
-        getLoaderManager().initLoader(EVENT_LOADER, null, this);
 
         recyclerView = (RecyclerView) findViewById(R.id.eventitem_list);
 
@@ -173,6 +172,7 @@ public class EventItemListActivity extends AppCompatActivity implements LoaderMa
             handleNewLocation(mLastLocation);
         } else {
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+            getLoaderManager().initLoader(EVENT_LOADER, null, this);
         }
 
     }
@@ -240,6 +240,7 @@ public class EventItemListActivity extends AppCompatActivity implements LoaderMa
                 SharedPreferences.Editor editor = settings.edit();
                 editor.putString("location", addressList.get(0).getLocality());
                 editor.apply();
+                getLoaderManager().initLoader(EVENT_LOADER, null, this);
             } else {
                 Toast.makeText(getApplicationContext(), "Where are you?", Toast.LENGTH_LONG).show();
                 return;
