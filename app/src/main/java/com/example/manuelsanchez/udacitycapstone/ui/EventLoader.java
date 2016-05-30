@@ -22,6 +22,7 @@ public class EventLoader {
     public static final int COL_VENUE_ADDRESS = 10;
     public static final int COL_VENUE_POSTAL_CODE = 11;
     public static final int COL_PERFORMER_URL = 12;
+    public static final int COL_EVENT_ITEM_ID = 13;
 
     public static final String[] EVENT_COLUMNS = {
             EventContract.EventEntry.TABLE_NAME + "." + EventContract.EventEntry.COLUMN_EVENT_ID,
@@ -37,6 +38,7 @@ public class EventLoader {
             EventContract.EventEntry.COLUMN_VENUE_ADDRESS,
             EventContract.EventEntry.COLUMN_VENUE_POSTAL_CODE,
             "GROUP_CONCAT(" + EventContract.PerformerEntry.COLUMN_IMAGE_URL + ")",
+            EventContract.EventEntry.TABLE_NAME + "." + EventContract.EventEntry._ID,
     };
 
     public static final String[] PERFORMER_EVENT_COLUMNS = {

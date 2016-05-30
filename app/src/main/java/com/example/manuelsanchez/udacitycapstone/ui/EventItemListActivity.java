@@ -172,7 +172,6 @@ public class EventItemListActivity extends AppCompatActivity implements LoaderMa
             handleNewLocation(mLastLocation);
         } else {
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
-            getLoaderManager().initLoader(EVENT_LOADER, null, this);
         }
 
     }
@@ -263,6 +262,12 @@ public class EventItemListActivity extends AppCompatActivity implements LoaderMa
         private String getEventId(int position) {
             mCursor.moveToPosition(position);
             return mCursor.getString(COL_EVENT_ID);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            mCursor.moveToPosition(position);
+            return mCursor.getLong(COL_EVENT_ITEM_ID);
         }
 
         @Override
