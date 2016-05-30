@@ -51,8 +51,9 @@ public class EventDbHelper extends SQLiteOpenHelper {
                 "CREATE TABLE " + PerformerEventMapEntry.TABLE_NAME + " (" +
                         PerformerEventMapEntry._ID + " INTEGER PRIMARY KEY, " +
                         PerformerEventMapEntry.COLUMN_PERFORMER_ID + " TEXT NOT NULL, " +
-                        PerformerEventMapEntry.COLUMN_EVENT_ID + " TEXT NOT NULL " +
-                        " );";
+                        PerformerEventMapEntry.COLUMN_EVENT_ID + " TEXT NOT NULL, " +
+                        "UNIQUE ( " + PerformerEventMapEntry.COLUMN_EVENT_ID + ", " +
+                        PerformerEventMapEntry.COLUMN_PERFORMER_ID + ") ON CONFLICT REPLACE);";
 
         final String SQL_CREATE_LOCATION_TABLE =
                 "CREATE TABLE " + LocationEntry.TABLE_NAME + " (" +

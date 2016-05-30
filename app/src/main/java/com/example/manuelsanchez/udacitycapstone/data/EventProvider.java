@@ -46,11 +46,11 @@ public class EventProvider extends ContentProvider {
     static {
         eventsQueryBuilder.setTables(
                 EventEntry.TABLE_NAME +
-                        " INNER JOIN " + PerformerEventMapEntry.TABLE_NAME +
+                        " LEFT OUTER JOIN " + PerformerEventMapEntry.TABLE_NAME +
                         " ON " + EventEntry.TABLE_NAME + "." + EventEntry.COLUMN_EVENT_ID +
                         " = " + PerformerEventMapEntry.TABLE_NAME + "." + PerformerEventMapEntry.COLUMN_EVENT_ID +
 
-                        " INNER JOIN " + PerformerEntry.TABLE_NAME +
+                        " LEFT OUTER JOIN " + PerformerEntry.TABLE_NAME +
                         " ON " + PerformerEntry.TABLE_NAME + "." + PerformerEntry.COLUMN_PERFORMER_ID +
                         " = " + PerformerEventMapEntry.TABLE_NAME + "." + PerformerEventMapEntry.COLUMN_PERFORMER_ID
         );
@@ -66,6 +66,7 @@ public class EventProvider extends ContentProvider {
 
     private static final String eventById = EventEntry.TABLE_NAME + "." + EventEntry.COLUMN_EVENT_ID + " = ? ";
     private static final String eventByPerformerId = PerformerEventMapEntry.TABLE_NAME + "." + PerformerEventMapEntry.COLUMN_PERFORMER_ID + " = ? ";
+    private static final String groupByEventId = EventEntry.TABLE_NAME + "." + EventEntry.COLUMN_EVENT_ID;
 
     @Override
     public boolean onCreate() {
@@ -85,7 +86,7 @@ public class EventProvider extends ContentProvider {
                         projection,
                         null,
                         null,
-                        null,
+                        groupByEventId,
                         null,
                         sortOrder);
                 break;
