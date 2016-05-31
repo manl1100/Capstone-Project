@@ -157,6 +157,9 @@ public class EventSyncAdapter extends AbstractThreadedSyncAdapter {
         final String JSON_STRING_VENUE_ADDRESS = "venue_address";
         final String JSON_STRING_VENUE_CITY = "city_name";
         final String JSON_STRING_ID = "id";
+        final String JSON_OBJECT_IMAGE = "image";
+        final String JSON_OBJECT_MEDIUM = "medium";
+        final String JSON_STRING_IMAGE = "url";
 
 
         List<Event> events = new ArrayList<>();
@@ -187,13 +190,18 @@ public class EventSyncAdapter extends AbstractThreadedSyncAdapter {
                     for (int j = 0; j < artistArray.length(); j++) {
                         String artistName = artistArray.getJSONObject(j).getString(JSON_STRING_ARTIST);
                         String artistId = artistArray.getJSONObject(j).getString(JSON_STRING_ID);
-                        artistList.add(new Artist(artistName, artistId));
+                        JSONObject image = eventItem.getJSONObject(JSON_OBJECT_IMAGE);
+                        JSONObject medium = image.getJSONObject(JSON_OBJECT_MEDIUM);
+                        String imageUrl = medium.getString(JSON_STRING_IMAGE);
+                        artistList.add(new Artist(artistName, artistId, imageUrl));
                     }
                 } else {
-                    //TODO: remove artist object
                     String artist = artistObject.getJSONObject(JSON_ARTIST).getString(JSON_STRING_ARTIST);
                     String artistId = artistObject.getJSONObject(JSON_ARTIST).getString(JSON_STRING_ID);
-                    artistList.add(new Artist(artist, artistId));
+                    JSONObject image = eventItem.getJSONObject(JSON_OBJECT_IMAGE);
+                    JSONObject medium = image.getJSONObject(JSON_OBJECT_MEDIUM);
+                    String imageUrl = medium.getString(JSON_STRING_IMAGE);
+                    artistList.add(new Artist(artist, artistId, imageUrl));
                 }
 
                 Event event = new Event.Builder()

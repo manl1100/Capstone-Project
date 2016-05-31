@@ -19,6 +19,12 @@ public class Artist implements Parcelable {
         this.eventfulArtistId = artistId;
     }
 
+    public Artist(String artistName, String artistId, String imageUrl) {
+        this.artistName = artistName;
+        this.eventfulArtistId = artistId;
+        this.imageUrl = imageUrl;
+    }
+
     protected Artist(Parcel in) {
         eventfulArtistId = in.readString();
         artistName = in.readString();

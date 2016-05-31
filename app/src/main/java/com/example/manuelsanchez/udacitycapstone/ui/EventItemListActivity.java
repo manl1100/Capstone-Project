@@ -2,6 +2,7 @@ package com.example.manuelsanchez.udacitycapstone.ui;
 
 import android.Manifest;
 import android.app.LoaderManager;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
@@ -31,6 +32,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,6 +47,7 @@ import com.google.android.gms.drive.Permission;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.util.List;
@@ -146,7 +149,7 @@ public class EventItemListActivity extends AppCompatActivity implements LoaderMa
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        SimpleItemRecyclerViewAdapter adapter = new SimpleItemRecyclerViewAdapter(data);
+        SimpleItemRecyclerViewAdapter adapter = new SimpleItemRecyclerViewAdapter(data, this);
         adapter.setHasStableIds(true);
         recyclerView.setAdapter(adapter);
     }
@@ -254,9 +257,11 @@ public class EventItemListActivity extends AppCompatActivity implements LoaderMa
     public class SimpleItemRecyclerViewAdapter extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
         private Cursor mCursor;
+        private Context mContext;
 
-        public SimpleItemRecyclerViewAdapter(Cursor cursor) {
+        public SimpleItemRecyclerViewAdapter(Cursor cursor, Context context) {
             mCursor = cursor;
+            mContext = context;
         }
 
         private String getEventId(int position) {
@@ -282,6 +287,12 @@ public class EventItemListActivity extends AppCompatActivity implements LoaderMa
 
             holder.mContentView.setText(mCursor.getString(COL_VENUE));
             holder.mIdView.setText(mCursor.getString(COL_PERFORMER));
+            Picasso.with(mContext)
+                    .load(mCursor.getString(COL_PERFORMER_URL).split(",")[0])
+                    .resize(150, 150)
+                    .centerCrop()
+                    .into(holder.mImageView);
+
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -312,6 +323,7 @@ public class EventItemListActivity extends AppCompatActivity implements LoaderMa
             public final View mView;
             public final TextView mIdView;
             public final TextView mContentView;
+            public final ImageView mImageView;
             public Event mItem;
 
             public ViewHolder(View view) {
@@ -319,6 +331,7 @@ public class EventItemListActivity extends AppCompatActivity implements LoaderMa
                 mView = view;
                 mIdView = (TextView) view.findViewById(R.id.id);
                 mContentView = (TextView) view.findViewById(R.id.content);
+                mImageView = (ImageView) view.findViewById(R.id.performer_thumbnail);
             }
         }
     }
