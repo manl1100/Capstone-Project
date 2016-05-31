@@ -286,7 +286,7 @@ public class EventItemListActivity extends AppCompatActivity implements LoaderMa
             mCursor.moveToPosition(position);
 
             holder.mContentView.setText(mCursor.getString(COL_VENUE));
-            holder.mIdView.setText(mCursor.getString(COL_PERFORMER));
+            holder.mIdView.setText(mCursor.getString(COL_PERFORMER).split(",")[0]);
             Picasso.with(mContext)
                     .load(mCursor.getString(COL_PERFORMER_URL).split(",")[0])
                     .resize(150, 150)
