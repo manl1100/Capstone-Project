@@ -75,6 +75,8 @@ public class EventItemListActivity extends AppCompatActivity implements LoaderMa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_eventitem_list);
 
+        getLoaderManager().initLoader(EVENT_LOADER, null, this);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle(getTitle());
@@ -242,7 +244,6 @@ public class EventItemListActivity extends AppCompatActivity implements LoaderMa
                 SharedPreferences.Editor editor = settings.edit();
                 editor.putString("location", addressList.get(0).getLocality());
                 editor.apply();
-                getLoaderManager().initLoader(EVENT_LOADER, null, this);
             } else {
                 Toast.makeText(getApplicationContext(), "Where are you?", Toast.LENGTH_LONG).show();
                 return;
@@ -287,11 +288,14 @@ public class EventItemListActivity extends AppCompatActivity implements LoaderMa
 
             holder.mContentView.setText(mCursor.getString(COL_VENUE));
             holder.mIdView.setText(mCursor.getString(COL_PERFORMER).split(",")[0]);
-            Picasso.with(mContext)
-                    .load(mCursor.getString(COL_PERFORMER_URL).split(",")[0])
-                    .resize(150, 150)
-                    .centerCrop()
-                    .into(holder.mImageView);
+
+            if (!mTwoPane) {
+                Picasso.with(mContext)
+                        .load(mCursor.getString(COL_PERFORMER_URL).split(",")[0])
+                        .resize(150, 150)
+                        .centerCrop()
+                        .into(holder.mImageView);
+            }
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
