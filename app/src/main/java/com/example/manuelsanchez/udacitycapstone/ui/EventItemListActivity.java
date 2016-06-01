@@ -263,6 +263,11 @@ public class EventItemListActivity extends AppCompatActivity implements LoaderMa
             return mCursor.getString(COL_EVENT_ID);
         }
 
+        private String getPerformerThumbnail(int position) {
+            mCursor.moveToPosition(position);
+            return mCursor.getString(COL_PERFORMER_URL).split(",")[0];
+        }
+
         @Override
         public long getItemId(int position) {
             mCursor.moveToPosition(position);

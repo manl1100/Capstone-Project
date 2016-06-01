@@ -144,8 +144,12 @@ public class EventItemDetailFragment extends Fragment implements OnMapReadyCallb
 
             Activity activity = this.getActivity();
             CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
+            ImageView imageView = (ImageView) activity.findViewById(R.id.toolbar_performer_thumbnail);
             if (appBarLayout != null) {
                 appBarLayout.setTitle(data.getString(COL_PERFORMER));
+                Picasso.with(activity)
+                        .load(data.getString(COL_PERFORMER_URL).split(",")[0])
+                        .into(imageView);
             }
 
             mVenueAddress.setText(data.getString(COL_VENUE_ADDRESS));
