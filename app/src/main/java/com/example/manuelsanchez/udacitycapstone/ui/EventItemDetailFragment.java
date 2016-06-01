@@ -13,6 +13,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.manuelsanchez.udacitycapstone.R;
@@ -23,6 +24,7 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.squareup.picasso.Picasso;
 
 import static com.example.manuelsanchez.udacitycapstone.ui.EventLoader.*;
 
@@ -43,7 +45,10 @@ public class EventItemDetailFragment extends Fragment implements OnMapReadyCallb
     private TextView mDateTextView;
     private TextView mVenueAddress;
     private TextView mVenueCityStateZip;
+    private ImageView mImageView;
     private RecyclerView mLineupRecyclerView;
+
+    private boolean mTwoPane;
 
     public EventItemDetailFragment() {
     }
@@ -66,6 +71,10 @@ public class EventItemDetailFragment extends Fragment implements OnMapReadyCallb
         mVenueTextView = ((TextView) rootView.findViewById(R.id.eventitem_detail_venue));
         mDateTextView = ((TextView) rootView.findViewById(R.id.eventitem_detail_date));
         mVenueAddress = ((TextView) rootView.findViewById(R.id.venue_address));
+        mImageView = ((ImageView) rootView.findViewById(R.id.performer_thumb_nail));
+        if (mImageView != null) {
+            mTwoPane = true;
+        }
         mVenueCityStateZip = ((TextView) rootView.findViewById(R.id.venue_city_state_zip));
         mLineupRecyclerView = (RecyclerView) rootView.findViewById(R.id.lineup);
         mMapView = (MapView) rootView.findViewById(R.id.venue_map);
@@ -123,6 +132,15 @@ public class EventItemDetailFragment extends Fragment implements OnMapReadyCallb
             mMapView.getMapAsync(this);
             mVenueTextView.setText(data.getString(COL_VENUE));
             mDateTextView.setText(Utility.getFormattedDateString(data.getString(COL_DATE)));
+
+            if (mTwoPane) {
+                String[] url = data.getString(COL_PERFORMER_URL).split(",");
+                if (url.length > 0) {
+                    Picasso.with(getActivity())
+                        .load(url[0])
+                        .into(mImageView);
+                }
+            }
 
             Activity activity = this.getActivity();
             CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);

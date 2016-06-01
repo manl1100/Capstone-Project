@@ -125,7 +125,7 @@ public class EventItemListActivity extends AppCompatActivity implements LoaderMa
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_refresh) {
-            new EventAsyncTask(this).execute("75209");
+            EventSyncAdapter.syncImmediately(this);
             return true;
         }
         return super.onOptionsItemSelected(item);
