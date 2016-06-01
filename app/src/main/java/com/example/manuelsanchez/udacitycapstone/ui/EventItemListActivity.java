@@ -85,16 +85,9 @@ public class EventItemListActivity extends AppCompatActivity implements LoaderMa
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mTwoPane) {
-                    ArtistSearchActivityFragment fragment = new ArtistSearchActivityFragment();
-                    getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.eventitem_detail_container, fragment)
-                            .commit();
-                } else {
-                    Context context = view.getContext();
-                    Intent intent = new Intent(context, ArtistSearchActivity.class);
-                    context.startActivity(intent);
-                }
+                Context context = view.getContext();
+                Intent intent = new Intent(context, ArtistSearchActivity.class);
+                context.startActivity(intent);
             }
         });
 
@@ -167,7 +160,7 @@ public class EventItemListActivity extends AppCompatActivity implements LoaderMa
                 ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_COARSE_LOCATION_PERMISSION);
+                        Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_COARSE_LOCATION_PERMISSION);
             }
             return;
         }
