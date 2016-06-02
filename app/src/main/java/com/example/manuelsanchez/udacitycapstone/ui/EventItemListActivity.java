@@ -41,6 +41,7 @@ import com.example.manuelsanchez.udacitycapstone.data.EventContract;
 import com.example.manuelsanchez.udacitycapstone.sync.EventSyncAdapter;
 import com.example.manuelsanchez.udacitycapstone.ui.search.ArtistSearchActivity;
 import com.example.manuelsanchez.udacitycapstone.ui.search.ArtistSearchActivityFragment;
+import com.example.manuelsanchez.udacitycapstone.util.Utility;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.drive.Permission;
@@ -133,7 +134,7 @@ public class EventItemListActivity extends AppCompatActivity implements LoaderMa
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        Uri eventUri = EventEntry.buildEventUriWithDateAndLocation("Dallas", System.currentTimeMillis());
+        Uri eventUri = EventEntry.buildEventUriWithDateAndLocation(Utility.getPreferredLocation(this), System.currentTimeMillis());
         return new CursorLoader(getApplicationContext(),
                 eventUri,
                 EVENT_COLUMNS,
@@ -237,6 +238,8 @@ public class EventItemListActivity extends AppCompatActivity implements LoaderMa
                 SharedPreferences.Editor editor = settings.edit();
                 editor.putString("location", addressList.get(0).getLocality());
                 editor.apply();
+                EventSyncAdapter.syncImmediately(this);
+                getLoaderManager().restartLoader(EVENT_LOADER, null, this);
             } else {
                 Toast.makeText(getApplicationContext(), "Where are you?", Toast.LENGTH_LONG).show();
                 return;
