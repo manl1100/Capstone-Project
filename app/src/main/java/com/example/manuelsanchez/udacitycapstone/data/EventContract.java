@@ -51,7 +51,15 @@ public class EventContract {
         }
 
         public static Uri buildEventUriWithDateAndLocation(String location, long startDate) {
-            return CONTENT_URI;
+            return CONTENT_URI.buildUpon().appendPath(location).appendPath(Long.toString(startDate)).build();
+        }
+
+        public static String getLocationFromUri(Uri uri) {
+            return uri.getPathSegments().get(1);
+        }
+
+        public static String getDateFromUri(Uri uri) {
+            return uri.getPathSegments().get(2);
         }
     }
 
