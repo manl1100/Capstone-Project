@@ -19,6 +19,7 @@ public class EventProvider extends ContentProvider {
     private static final UriMatcher sUriMatcher = buildUriMatcher();
     private static final int EVENT = 100;
     private static final int EVENT_WITH_ID = 150;
+    private static final int EVENT_WITH_LOCATION_AND_ID = 175;
     private static final int PERFORMER = 200;
     private static final int PERFORMER_WITH_ID = 250;
     private static final int PERFORMEREVENT = 300;
@@ -30,6 +31,7 @@ public class EventProvider extends ContentProvider {
 
         matcher.addURI(authority, PATH_EVENT, EVENT);
         matcher.addURI(authority, PATH_EVENT + "/*", EVENT_WITH_ID);
+        matcher.addURI(authority, PATH_EVENT + "/*/#", EVENT_WITH_LOCATION_AND_ID);
 
         matcher.addURI(authority, PATH_PERFORMER, PERFORMER);
         matcher.addURI(authority, PATH_PERFORMER + "/*", PERFORMER_WITH_ID);
@@ -52,7 +54,12 @@ public class EventProvider extends ContentProvider {
 
                         " LEFT OUTER JOIN " + PerformerEntry.TABLE_NAME +
                         " ON " + PerformerEntry.TABLE_NAME + "." + PerformerEntry.COLUMN_PERFORMER_ID +
-                        " = " + PerformerEventMapEntry.TABLE_NAME + "." + PerformerEventMapEntry.COLUMN_PERFORMER_ID
+                        " = " + PerformerEventMapEntry.TABLE_NAME + "." + PerformerEventMapEntry.COLUMN_PERFORMER_ID +
+
+
+                        " INNER JOIN " + LocationEntry.TABLE_NAME +
+                        " ON " + LocationEntry.TABLE_NAME + "." + LocationEntry._ID +
+                        " = " + EventEntry.TABLE_NAME + "." + EventEntry.COLUMN_LOCATION_SETTING_ID
         );
 
         eventsByPerformerQueryBuilder.setTables(
@@ -67,6 +74,7 @@ public class EventProvider extends ContentProvider {
     private static final String eventById = EventEntry.TABLE_NAME + "." + EventEntry.COLUMN_EVENT_ID + " = ? ";
     private static final String eventByPerformerId = PerformerEventMapEntry.TABLE_NAME + "." + PerformerEventMapEntry.COLUMN_PERFORMER_ID + " = ? ";
     private static final String groupByEventId = EventEntry.TABLE_NAME + "." + EventEntry.COLUMN_EVENT_ID;
+    private static final String eventByLocation = LocationEntry.TABLE_NAME + "." + LocationEntry.COLUMN_LOCATION_SETTING + " = ? ";
 
     @Override
     public boolean onCreate() {
@@ -91,6 +99,21 @@ public class EventProvider extends ContentProvider {
                         sortOrder);
                 break;
             }
+
+            case EVENT_WITH_LOCATION_AND_ID: {
+                String location = EventEntry.getLocationFromUri(uri);
+                String date = EventEntry.getDateFromUri(uri);
+
+                returnCursor = eventsQueryBuilder.query(mOpenHelper.getReadableDatabase(),
+                        projection,
+                        eventByLocation,
+                        new String[] {location},
+                        groupByEventId,
+                        null,
+                        sortOrder);
+                break;
+            }
+
 
             case EVENT_WITH_ID: {
                 String eventId = EventEntry.getEventIdFromUri(uri);
