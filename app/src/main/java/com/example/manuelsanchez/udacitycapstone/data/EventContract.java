@@ -20,10 +20,10 @@ public class EventContract {
     public static final class EventEntry implements BaseColumns {
 
         public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_EVENT).build();
-        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY +"/" + PATH_EVENT;
-        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY +"/" + PATH_EVENT;
+        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_EVENT;
+        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_EVENT;
 
-        public static final String TABLE_NAME =  "event";
+        public static final String TABLE_NAME = "event";
         public static final String COLUMN_VENUE = "venue";
         public static final String COLUMN_PERFORMER = "performer";
         public static final String COLUMN_COORD_LATITUDE = "coord_lat";
@@ -61,6 +61,14 @@ public class EventContract {
         public static String getDateFromUri(Uri uri) {
             return uri.getPathSegments().get(2);
         }
+
+        public static Uri buildEventUriWithPerformerId(String performerId) {
+            return CONTENT_URI.buildUpon().appendPath(performerId).build();
+        }
+
+        public static String getPerformerIdFromUri(Uri uri) {
+            return uri.getPathSegments().get(1);
+        }
     }
 
     public static final class PerformerEntry implements BaseColumns {
@@ -74,13 +82,10 @@ public class EventContract {
         public static final String COLUMN_IMAGE_URL = "image_url";
         public static final String COLUMN_PERFORMER_ID = "performer_id";
 
-        public static Uri buildEventUriWithPerformerId(String performerId) {
-            return CONTENT_URI.buildUpon().appendPath(performerId).build();
+        public static Uri buildPerformerUri(long id) {
+            return ContentUris.withAppendedId(CONTENT_URI, id);
         }
 
-        public static String getPerformerIdFromUri(Uri uri) {
-            return uri.getPathSegments().get(1);
-        }
     }
 
     public static final class PerformerEventMapEntry implements BaseColumns {
