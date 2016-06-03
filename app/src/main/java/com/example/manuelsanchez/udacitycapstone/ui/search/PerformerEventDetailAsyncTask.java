@@ -2,6 +2,7 @@ package com.example.manuelsanchez.udacitycapstone.ui.search;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -131,11 +132,13 @@ public class PerformerEventDetailAsyncTask extends AsyncTask<String, Void, Void>
             contentValues.put(EventEntry.COLUMN_VENUE_CITY, responseObject.getString(JSON_STRING_VENUE_CITY));
             contentValues.put(EventEntry.COLUMN_VENUE_ADDRESS, responseObject.getString(JSON_STRING_VENUE_ADDRESS));
             contentValues.put(EventEntry.COLUMN_VENUE_POSTAL_CODE, responseObject.getString(JSON_STRING_POSTAL_CODE));
+
+            long locationId = addLocation(responseObject.getString(JSON_STRING_VENUE_CITY));
+            contentValues.put(EventEntry.COLUMN_LOCATION_SETTING_ID, locationId);
+
             eventsVector.add(contentValues);
 
-            ContentValues[] values = new ContentValues[eventsVector.size()];
-            eventsVector.toArray(values);
-            mContext.getContentResolver().bulkInsert(EventContract.EventEntry.CONTENT_URI, values);
+            mContext.getContentResolver().insert(EventContract.EventEntry.CONTENT_URI, contentValues);
 
 
         } catch (JSONException e) {
@@ -143,6 +146,30 @@ public class PerformerEventDetailAsyncTask extends AsyncTask<String, Void, Void>
         }
 
         return null;
+    }
+
+
+    // TODO: create common method
+    private long addLocation(String location) {
+        long id;
+
+        Cursor locationCursor = mContext.getContentResolver().query(
+                LocationEntry.CONTENT_URI,
+                new String[]{LocationEntry._ID},
+                LocationEntry.COLUMN_LOCATION_SETTING + " = ?",
+                new String[]{location},
+                null);
+
+        if (locationCursor.moveToFirst()) {
+            int locationIdIndex = locationCursor.getColumnIndex(LocationEntry._ID);
+            id = locationCursor.getLong(locationIdIndex);
+        } else {
+            ContentValues locationValues = new ContentValues();
+            locationValues.put(LocationEntry.COLUMN_LOCATION_SETTING, location);
+            Uri uri = mContext.getContentResolver().insert(LocationEntry.CONTENT_URI, locationValues);
+            id = LocationEntry.getLocationFromUri(uri);
+        }
+        return id;
     }
 
 }

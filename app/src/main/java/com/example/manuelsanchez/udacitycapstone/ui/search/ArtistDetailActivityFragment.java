@@ -71,7 +71,7 @@ public class ArtistDetailActivityFragment extends Fragment implements LoaderMana
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        Uri eventUri = EventContract.PerformerEntry.buildEventUriWithPerformerId(performerId);
+        Uri eventUri = EventContract.EventEntry.buildEventUriWithPerformerId(performerId);
         return new CursorLoader(getActivity(),
                 eventUri,
                 PERFORMER_EVENT_COLUMNS,

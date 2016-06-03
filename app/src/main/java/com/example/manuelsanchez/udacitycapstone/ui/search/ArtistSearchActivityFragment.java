@@ -1,5 +1,6 @@
 package com.example.manuelsanchez.udacitycapstone.ui.search;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
@@ -15,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.manuelsanchez.udacitycapstone.R;
+import com.example.manuelsanchez.udacitycapstone.data.EventContract;
 import com.example.manuelsanchez.udacitycapstone.ui.Artist;
 import com.squareup.picasso.Picasso;
 
@@ -92,6 +94,12 @@ public class ArtistSearchActivityFragment extends Fragment {
                     Context context = v.getContext();
                     Intent intent = new Intent(context, ArtistDetailActivity.class);
                     intent.putExtra(ArtistDetailActivityFragment.ARG_ITEM_ID, holder.mArtist);
+
+                    ContentValues contentValues = new ContentValues();
+                    contentValues.put(EventContract.PerformerEntry.COLUMN_PERFORMER_NAME, holder.mArtist.getArtistName());
+                    contentValues.put(EventContract.PerformerEntry.COLUMN_IMAGE_URL, holder.mArtist.getImageUrl());
+                    contentValues.put(EventContract.PerformerEntry.COLUMN_PERFORMER_ID, holder.mArtist.getEventfulArtistId());
+                    mContext.getContentResolver().insert(EventContract.PerformerEntry.CONTENT_URI, contentValues);
                     context.startActivity(intent);
                 }
             });
