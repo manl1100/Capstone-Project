@@ -34,7 +34,7 @@ public class EventProvider extends ContentProvider {
         matcher.addURI(authority, PATH_EVENT + "/*/#", EVENT_WITH_LOCATION_AND_ID);
 
         matcher.addURI(authority, PATH_PERFORMER, PERFORMER);
-        matcher.addURI(authority, PATH_PERFORMER + "/*", PERFORMER_WITH_ID);
+        matcher.addURI(authority, PATH_EVENT + "/*", PERFORMER_WITH_ID);
 
         matcher.addURI(authority, PATH_PERFORMER_EVENT, PERFORMEREVENT);
 
@@ -128,7 +128,7 @@ public class EventProvider extends ContentProvider {
             }
 
             case PERFORMER_WITH_ID: {
-                String performerId = PerformerEntry.getPerformerIdFromUri(uri);
+                String performerId = EventEntry.getPerformerIdFromUri(uri);
                 returnCursor = eventsByPerformerQueryBuilder.query(mOpenHelper.getReadableDatabase(),
                         projection,
                         eventByPerformerId,
@@ -198,6 +198,14 @@ public class EventProvider extends ContentProvider {
                 break;
             }
 
+            case PERFORMER: {
+                long id = db.insert(PerformerEntry.TABLE_NAME, null, values);
+                if (id > 0) {
+                    returnUri = PerformerEntry.buildPerformerUri(id);
+                }
+                break;
+            }
+
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -219,24 +227,32 @@ public class EventProvider extends ContentProvider {
     @Override
     public int bulkInsert(Uri uri, ContentValues[] values) {
         final int match = sUriMatcher.match(uri);
-
+        int count = 0;
         switch (match) {
 
             case EVENT: {
-                return bulkInsert(values, EventEntry.TABLE_NAME);
+                count = bulkInsert(values, EventEntry.TABLE_NAME);
+                break;
             }
 
             case PERFORMER: {
-                return bulkInsert(values, PerformerEntry.TABLE_NAME);
+                count = bulkInsert(values, PerformerEntry.TABLE_NAME);
+                break;
             }
 
             case PERFORMEREVENT: {
-                return bulkInsert(values, PerformerEventMapEntry.TABLE_NAME);
+                count = bulkInsert(values, PerformerEventMapEntry.TABLE_NAME);
+                break;
             }
 
             default:
                 return super.bulkInsert(uri, values);
         }
+
+        if (count > 0) {
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
+        return count;
     }
 
     private int bulkInsert(ContentValues[] contentValues, String tableName) {
