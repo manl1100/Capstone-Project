@@ -131,7 +131,7 @@ public class EventItemDetailFragment extends Fragment implements OnMapReadyCallb
 
             mMapView.getMapAsync(this);
             mVenueTextView.setText(data.getString(COL_VENUE));
-            mDateTextView.setText(Utility.getFormattedDateString(data.getString(COL_DATE)));
+            mDateTextView.setText(Utility.getFormattedDateString(data.getString(COL_DATE), true));
 
             if (mTwoPane) {
                 String[] url = data.getString(COL_PERFORMER_URL).split(",");

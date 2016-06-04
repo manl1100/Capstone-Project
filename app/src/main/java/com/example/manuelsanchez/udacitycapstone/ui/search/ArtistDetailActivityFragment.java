@@ -61,7 +61,6 @@ public class ArtistDetailActivityFragment extends Fragment implements LoaderMana
         View view = inflater.inflate(R.layout.fragment_artist_detail, container, false);
 
         if (mArtist != null) {
-            ((TextView) view.findViewById(R.id.performing_artist)).setText(mArtist.getArtistName());
             mRecyclerView = (RecyclerView) view.findViewById(R.id.tour_dates);
             new EventDetailAsyncTask(getActivity()).execute(mArtist.getEventfulArtistId());
         }
@@ -110,9 +109,9 @@ public class ArtistDetailActivityFragment extends Fragment implements LoaderMana
         public void onBindViewHolder(final ViewHolder holder, int position) {
             cursor.moveToPosition(position);
 
-            holder.performanceDate.setText(Utility.getFormattedDateString(cursor.getString(COL_DATE)));
+            holder.performanceDate.setText(Utility.getFormattedDateString(cursor.getString(4), false));
             holder.venue.setText(cursor.getString(1));
-            holder.location.setText(cursor.getString(4));
+            holder.location.setText(cursor.getString(8) + ", " + cursor.getString(5));
         }
 
         @Override

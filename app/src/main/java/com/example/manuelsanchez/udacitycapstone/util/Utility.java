@@ -19,7 +19,7 @@ public class Utility {
     private static String[] months = new DateFormatSymbols().getMonths();
     private static String[] weekdays = new DateFormatSymbols().getWeekdays();
 
-    public static String getFormattedDateString(String longDate) {
+    public static String getFormattedDateString(String longDate, boolean withDayOfWeek) {
         try {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATE_FORMAT);
             Date date = simpleDateFormat.parse(longDate);
@@ -29,8 +29,13 @@ public class Utility {
             int day = calendar.get(Calendar.DATE);
             int year = calendar.get(Calendar.YEAR);
 
-            int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
-            return String.format("%s %s %d, %d",weekdays[dayOfWeek], months[month], day, year);
+            if (withDayOfWeek) {
+                int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+                return String.format("%s %s %d, %d",weekdays[dayOfWeek], months[month], day, year);
+            } else {
+                return String.format("%s %d, %d", months[month], day, year);
+            }
+
         } catch (ParseException e) {
             e.printStackTrace();
         }
