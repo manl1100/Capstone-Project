@@ -30,14 +30,11 @@ public class EventProvider extends ContentProvider {
         final String authority = CONTENT_AUTHORITY;
 
         matcher.addURI(authority, PATH_EVENT, EVENT);
+        matcher.addURI(authority, PATH_EVENT + "/#/" + PATH_LOCATION + "/*", EVENT_WITH_LOCATION_AND_ID);
+        matcher.addURI(authority, PATH_EVENT + "/" + PATH_PERFORMER + "/*", PERFORMER_WITH_ID);
         matcher.addURI(authority, PATH_EVENT + "/*", EVENT_WITH_ID);
-        matcher.addURI(authority, PATH_EVENT + "/*/#", EVENT_WITH_LOCATION_AND_ID);
-
         matcher.addURI(authority, PATH_PERFORMER, PERFORMER);
-        matcher.addURI(authority, PATH_EVENT + "/*", PERFORMER_WITH_ID);
-
         matcher.addURI(authority, PATH_PERFORMER_EVENT, PERFORMEREVENT);
-
         matcher.addURI(authority, PATH_LOCATION, LOCATION);
         return matcher;
     }

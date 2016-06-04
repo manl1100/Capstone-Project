@@ -51,23 +51,23 @@ public class EventContract {
         }
 
         public static Uri buildEventUriWithDateAndLocation(String location, long startDate) {
-            return CONTENT_URI.buildUpon().appendPath(location).appendPath(Long.toString(startDate)).build();
+            return CONTENT_URI.buildUpon().appendPath(Long.toString(startDate)).appendPath(PATH_LOCATION).appendPath(location).build();
         }
 
         public static String getLocationFromUri(Uri uri) {
-            return uri.getPathSegments().get(1);
+            return uri.getPathSegments().get(3);
         }
 
         public static String getDateFromUri(Uri uri) {
-            return uri.getPathSegments().get(2);
+            return uri.getPathSegments().get(1);
         }
 
         public static Uri buildEventUriWithPerformerId(String performerId) {
-            return CONTENT_URI.buildUpon().appendPath(performerId).build();
+            return CONTENT_URI.buildUpon().appendPath(PATH_PERFORMER).appendPath(performerId).build();
         }
 
         public static String getPerformerIdFromUri(Uri uri) {
-            return uri.getPathSegments().get(1);
+            return uri.getPathSegments().get(2);
         }
     }
 
