@@ -2,7 +2,6 @@ package com.example.manuelsanchez.udacitycapstone.ui;
 
 import android.Manifest;
 import android.app.LoaderManager;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
@@ -16,14 +15,12 @@ import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.view.ActionMode;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -40,11 +37,9 @@ import com.example.manuelsanchez.udacitycapstone.R;
 import com.example.manuelsanchez.udacitycapstone.data.EventContract;
 import com.example.manuelsanchez.udacitycapstone.sync.EventSyncAdapter;
 import com.example.manuelsanchez.udacitycapstone.ui.search.ArtistSearchActivity;
-import com.example.manuelsanchez.udacitycapstone.ui.search.ArtistSearchActivityFragment;
 import com.example.manuelsanchez.udacitycapstone.util.Utility;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.drive.Permission;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
@@ -53,10 +48,15 @@ import com.squareup.picasso.Picasso;
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
-import java.util.prefs.Preferences;
 
-import static com.example.manuelsanchez.udacitycapstone.data.EventContract.*;
-import static com.example.manuelsanchez.udacitycapstone.ui.EventLoader.*;
+import static com.example.manuelsanchez.udacitycapstone.data.EventContract.EventEntry;
+import static com.example.manuelsanchez.udacitycapstone.ui.EventLoader.COL_EVENT_ID;
+import static com.example.manuelsanchez.udacitycapstone.ui.EventLoader.COL_EVENT_ITEM_ID;
+import static com.example.manuelsanchez.udacitycapstone.ui.EventLoader.COL_PERFORMER;
+import static com.example.manuelsanchez.udacitycapstone.ui.EventLoader.COL_PERFORMER_URL;
+import static com.example.manuelsanchez.udacitycapstone.ui.EventLoader.COL_VENUE;
+import static com.example.manuelsanchez.udacitycapstone.ui.EventLoader.EVENT_COLUMNS;
+import static com.example.manuelsanchez.udacitycapstone.ui.EventLoader.EVENT_LOADER;
 
 
 public class EventItemListActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {

@@ -17,7 +17,6 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.example.manuelsanchez.udacitycapstone.R;
-import com.example.manuelsanchez.udacitycapstone.data.EventContract;
 import com.example.manuelsanchez.udacitycapstone.ui.Artist;
 import com.example.manuelsanchez.udacitycapstone.ui.Event;
 import com.example.manuelsanchez.udacitycapstone.util.Utility;
@@ -36,14 +35,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
-import static com.example.manuelsanchez.udacitycapstone.data.EventContract.*;
+import static com.example.manuelsanchez.udacitycapstone.data.EventContract.EventEntry;
+import static com.example.manuelsanchez.udacitycapstone.data.EventContract.LocationEntry;
+import static com.example.manuelsanchez.udacitycapstone.data.EventContract.PerformerEntry;
+import static com.example.manuelsanchez.udacitycapstone.data.EventContract.PerformerEventMapEntry;
 
 public class EventSyncAdapter extends AbstractThreadedSyncAdapter {
 
     private static final String LOG_TAG = EventSyncAdapter.class.getSimpleName();
 
     public static final int SYNC_INTERVAL = 60 * 180;
-    public static final int SYNC_FLEXTIME = SYNC_INTERVAL/3;
+    public static final int SYNC_FLEXTIME = SYNC_INTERVAL / 3;
 
     ContentResolver contentResolver;
 

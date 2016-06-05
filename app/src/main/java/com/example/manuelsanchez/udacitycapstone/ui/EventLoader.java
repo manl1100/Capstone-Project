@@ -2,9 +2,8 @@ package com.example.manuelsanchez.udacitycapstone.ui;
 
 import com.example.manuelsanchez.udacitycapstone.data.EventContract;
 
-/**
- * Created by manuelsanchez on 5/15/16.
- */
+
+
 public class EventLoader {
 
     public static final int EVENT_LOADER = 0;
