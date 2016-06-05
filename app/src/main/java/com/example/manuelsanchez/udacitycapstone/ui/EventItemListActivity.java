@@ -101,6 +101,7 @@ public class EventItemListActivity extends AppCompatActivity implements LoaderMa
 
         if (mGoogleApiClient == null) {
             mGoogleApiClient = new GoogleApiClient.Builder(this)
+                    .enableAutoManage(this, this)
                     .addConnectionCallbacks(this)
                     .addOnConnectionFailedListener(this)
                     .addApi(LocationServices.API)
@@ -177,45 +178,30 @@ public class EventItemListActivity extends AppCompatActivity implements LoaderMa
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-//        switch (requestCode) {
-//            case REQUEST_COARSE_LOCATION_PERMISSION: {
-//                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                    mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-//                    if (mLastLocation != null) {
-//                        handleNewLocation(mLastLocation);
-//                    } else {
-//                        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
-//                    }
-//                }
-//            }
-//
-//        }
+        switch (requestCode) {
+            case REQUEST_COARSE_LOCATION_PERMISSION: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                            ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                        return;
+                    }
+                    mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+                    if (mLastLocation != null) {
+                        handleNewLocation(mLastLocation);
+                    } else {
+                        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+                    }
+                } else {
+                    EventSyncAdapter.syncImmediately(this);
+                }
+            }
+
+        }
     }
 
     @Override
     public void onConnectionSuspended(int i) {
         Log.e(LOG_TAG, "onConnectionSuspended");
-    }
-
-    @Override
-    protected void onPause() {
-        if (mGoogleApiClient.isConnected()) {
-            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
-            mGoogleApiClient.disconnect();
-        }
-        super.onPause();
-    }
-
-    @Override
-    protected void onStart() {
-        mGoogleApiClient.connect();
-        super.onStart();
-    }
-
-    @Override
-    protected void onStop() {
-        mGoogleApiClient.disconnect();
-        super.onStop();
     }
 
     @Override
