@@ -253,9 +253,9 @@ public class EventSyncAdapter extends AbstractThreadedSyncAdapter {
             e.printStackTrace();
         }
 
-        bulkInsert(eventsVector, EventEntry.CONTENT_URI);
-        bulkInsert(performerVector, PerformerEntry.CONTENT_URI);
         bulkInsert(performerEventVector, PerformerEventMapEntry.CONTENT_URI);
+        bulkInsert(performerVector, PerformerEntry.CONTENT_URI);
+        bulkInsert(eventsVector, EventEntry.CONTENT_URI);
     }
 
     private void bulkInsert(Vector<ContentValues> contentValues, Uri contentUri) {
