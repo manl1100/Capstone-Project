@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
 
 import com.example.manuelsanchez.udacitycapstone.R;
@@ -107,6 +108,7 @@ public class EventAsyncTask extends AsyncTask<String, Void, List<Event>> {
 
 
         } catch (Exception e) {
+            Toast.makeText(mContext, "Please check your internet connection", Toast.LENGTH_LONG).show();
             Log.e(LOG_TAG, "Error", e);
         } finally {
             if (urlConnection != null) {
@@ -175,7 +177,6 @@ public class EventAsyncTask extends AsyncTask<String, Void, List<Event>> {
                         artistList.add(new Artist(artistName, artistId));
                     }
                 } else {
-                    //TODO: remove artist object
                     String artist = artistObject.getJSONObject(JSON_ARTIST).getString(JSON_STRING_ARTIST);
                     String artistId = artistObject.getJSONObject(JSON_ARTIST).getString(JSON_STRING_ID);
                     artistList.add(new Artist(artist, artistId));

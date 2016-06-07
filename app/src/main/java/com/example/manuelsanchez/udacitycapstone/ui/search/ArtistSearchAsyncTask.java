@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.example.manuelsanchez.udacitycapstone.R;
 import com.example.manuelsanchez.udacitycapstone.ui.Artist;
@@ -83,6 +84,7 @@ public class ArtistSearchAsyncTask extends AsyncTask<String, Void, List<Artist>>
 
 
         } catch (Exception e) {
+            Toast.makeText(mContext, "Please check your internet connection", Toast.LENGTH_LONG).show();
             Log.e(LOG_TAG, "Error", e);
         } finally {
             if (urlConnection != null) {
