@@ -31,6 +31,7 @@ public class ArtistDetailActivityFragment extends Fragment implements LoaderMana
     private TourDateRecyclerViewAdapter mTourDateRecyclerViewAdapter;
     private Artist mArtist;
     private RecyclerView mRecyclerView;
+    private TextView emptyView;
     private String performerId;
 
     public ArtistDetailActivityFragment() {
@@ -62,6 +63,7 @@ public class ArtistDetailActivityFragment extends Fragment implements LoaderMana
 
         if (mArtist != null) {
             mRecyclerView = (RecyclerView) view.findViewById(R.id.tour_dates);
+            emptyView = (TextView) view.findViewById(R.id.empty_view);
             new EventDetailAsyncTask(getActivity()).execute(mArtist.getEventfulArtistId());
         }
 
@@ -84,6 +86,10 @@ public class ArtistDetailActivityFragment extends Fragment implements LoaderMana
         TourDateRecyclerViewAdapter adapter = new TourDateRecyclerViewAdapter(data);
         adapter.setHasStableIds(true);
         mRecyclerView.setAdapter(adapter);
+        if (data.getCount() == 0) {
+            mRecyclerView.setVisibility(View.GONE);
+            emptyView.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
