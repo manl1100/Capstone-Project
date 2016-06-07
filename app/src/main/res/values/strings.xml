@@ -10,6 +10,13 @@
     <string name="sync_account_type">udacitycapstone.example.com</string>
     <string name="content_authority">com.example.udacitycapstone.app</string>
 
+    <string name="event_widget">Upcoming Events</string>
+    <string name="venue">Venue</string>
+    <string name="lineup">Lineup</string>
+    <string name="thumb_nail_content_description">Performer thumbnail</string>
+    <string name="tour_dates">Tour Dates</string>
+    <string name="no_events_empty_view">No Events</string>
+    <string name="launcer_image">Launcher Image</string>
 
     <string name="google_maps_api_key">INSERT_GOOGLE_MAPS_API</string>
     <string name="eventful_api_key">INSERT_EVENTFUL_API</string>

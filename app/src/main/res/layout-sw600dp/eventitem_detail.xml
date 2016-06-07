@@ -29,6 +29,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingLeft="16dp"
+                android:paddingStart="16dp"
                 android:paddingTop="5dp"
                 android:textIsSelectable="true"
                 tools:context=".ui.EventItemDetailFragment" />
@@ -39,6 +40,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingLeft="16dp"
+                android:paddingStart="16dp"
                 android:textIsSelectable="true"
                 tools:context=".ui.EventItemDetailFragment" />
 
@@ -59,7 +61,7 @@
                         style="?android:attr/textAppearanceMedium"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Lineup" />
+                        android:text="@string/lineup" />
 
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/lineup"
@@ -87,7 +89,7 @@
                         style="?android:attr/textAppearanceMedium"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Venue" />
+                        android:text="@string/venue" />
 
                     <com.google.android.gms.maps.MapView
                         android:id="@+id/venue_map"

@@ -11,9 +11,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingLeft="16dp"
+        android:paddingStart="16dp"
         android:paddingTop="5dp"
         android:textIsSelectable="true"
-        android:text="Tour Dates"
+        android:text="@string/tour_dates"
         tools:context=".ui.EventItemDetailFragment" />
 
         <LinearLayout
