@@ -17,6 +17,7 @@
     <string name="tour_dates">Tour Dates</string>
     <string name="no_events_empty_view">No Events</string>
     <string name="launcer_image">Launcher Image</string>
+    <string name="artist_search">Search for artist</string>
 
     <string name="google_maps_api_key">INSERT_GOOGLE_MAPS_API</string>
     <string name="eventful_api_key">INSERT_EVENTFUL_API</string>

@@ -21,7 +21,8 @@
                 android:layout_height="150dp"
                 android:scaleType="centerCrop"
                 android:layout_margin="10dp"
-                android:layout_gravity="center"/>
+                android:layout_gravity="center"
+                android:contentDescription="@string/thumb_nail_content_description"/>
 
             <TextView
                 android:id="@+id/eventitem_detail_venue"
