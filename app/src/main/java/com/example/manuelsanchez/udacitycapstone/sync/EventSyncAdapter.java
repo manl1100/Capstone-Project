@@ -125,7 +125,7 @@ public class EventSyncAdapter extends AbstractThreadedSyncAdapter {
 
 
         } catch (Exception e) {
-            Toast.makeText(getContext(), "Please check your internet connection", Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), getContext().getString(R.string.check_connection_notif), Toast.LENGTH_LONG).show();
             Log.e(LOG_TAG, "Error", e);
         } finally {
             if (urlConnection != null) {

@@ -84,7 +84,7 @@ public class ArtistSearchAsyncTask extends AsyncTask<String, Void, List<Artist>>
 
 
         } catch (Exception e) {
-            Toast.makeText(mContext, "Please check your internet connection", Toast.LENGTH_LONG).show();
+            Toast.makeText(mContext, mContext.getString(R.string.check_connection_notif), Toast.LENGTH_LONG).show();
             Log.e(LOG_TAG, "Error", e);
         } finally {
             if (urlConnection != null) {
